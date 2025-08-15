@@ -12,7 +12,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ImproveButton } from '@/components/improve-button';
 
 export function ResumeForm() {
-  const { control, register } = useFormContext<ResumeData>();
+  const { control, register, getValues } = useFormContext<ResumeData>();
 
   const {
     fields: experienceFields,
@@ -125,7 +125,7 @@ export function ResumeForm() {
               <Card key={field.id} className="bg-muted/30">
                 <CardHeader className="flex flex-row items-center justify-between py-3">
                   <CardTitle className="text-lg">
-                    {control.getValues(`experience.${index}.title`) || `Job ${index + 1}`}
+                    {getValues(`experience.${index}.title`) || `Job ${index + 1}`}
                   </CardTitle>
                   <Button type="button" variant="ghost" size="icon" onClick={() => removeExperience(index)}>
                     <Trash2 className="h-4 w-4" />
@@ -199,7 +199,7 @@ export function ResumeForm() {
               <Card key={field.id} className="bg-muted/30">
                  <CardHeader className="flex flex-row items-center justify-between py-3">
                   <CardTitle className="text-lg">
-                    {control.getValues(`education.${index}.institution`) || `School ${index + 1}`}
+                    {getValues(`education.${index}.institution`) || `School ${index + 1}`}
                   </CardTitle>
                   <Button type="button" variant="ghost" size="icon" onClick={() => removeEducation(index)}>
                     <Trash2 className="h-4 w-4" />
