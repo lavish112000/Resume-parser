@@ -22,20 +22,20 @@ const blogPosts = [
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50">
       <AppHeader />
-      <main className="container mx-auto py-12">
-        <h1 className="text-4xl font-bold text-center mb-8">Career Advice Blog</h1>
+      <main className="container mx-auto py-24 px-4">
+        <h1 className="text-4xl font-bold text-center mb-12">Career Advice Blog</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
+            <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
                 <CardTitle>{post.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">{post.summary}</p>
-                <a href={post.link} className="text-primary font-semibold mt-4 inline-block">
-                  Read More
+                <p className="text-muted-foreground mb-4">{post.summary}</p>
+                <a href={post.link} className="text-primary font-semibold hover:underline">
+                  Read More &rarr;
                 </a>
               </CardContent>
             </Card>

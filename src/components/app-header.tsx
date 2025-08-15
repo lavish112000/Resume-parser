@@ -1,7 +1,8 @@
 'use client';
 
-import { Hammer, Download, Sparkles, RefreshCcw } from 'lucide-react';
+import { Hammer, Download, RefreshCcw, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 type AppHeaderProps = {
   isEditing?: boolean;
@@ -13,24 +14,34 @@ export function AppHeader({ isEditing = false, onDownload, onReset }: AppHeaderP
   return (
     <header className="w-full p-4 bg-white/80 backdrop-blur-md border-b fixed top-0 left-0 z-50">
       <div className="max-w-screen-2xl mx-auto flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="bg-primary p-2 rounded-lg">
-            <Hammer className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <h1 className="text-2xl font-bold text-foreground">ResumeForge</h1>
+        <Link href="/" className="flex items-center gap-3">
+            <div className="bg-primary p-2 rounded-lg">
+                <Hammer className="h-6 w-6 text-primary-foreground" />
+            </div>
+            <h1 className="text-2xl font-bold text-foreground">ResumeForge</h1>
+        </Link>
+        
+        <div className="flex items-center gap-2">
+            {isEditing ? (
+            <>
+                <Button variant="outline" onClick={onReset}>
+                <RefreshCcw />
+                Start Over
+                </Button>
+                <Button onClick={onDownload}>
+                <Download />
+                Download PDF
+                </Button>
+            </>
+            ) : (
+                <Link href="/blog">
+                    <Button variant="ghost">
+                        <BookOpen className="mr-2"/>
+                        Blog
+                    </Button>
+                </Link>
+            )}
         </div>
-        {isEditing && (
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={onReset}>
-              <RefreshCcw />
-              Start Over
-            </Button>
-            <Button onClick={onDownload}>
-              <Download />
-              Download PDF
-            </Button>
-          </div>
-        )}
       </div>
     </header>
   );

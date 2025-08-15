@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, UploadCloud, FileText, Bot } from 'lucide-react';
+import { Loader2, UploadCloud, FileText, Bot, FileCheck, Palette } from 'lucide-react';
 
 interface LandingPageProps {
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -27,16 +27,20 @@ export function LandingPage({
   fileInputRef,
 }: LandingPageProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-      <main className="flex-grow flex items-center justify-center w-full">
-        <Card className="w-full max-w-2xl shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">AI-Powered Resume Builder</CardTitle>
-            <CardDescription className="text-lg">
-              Create a professional resume in minutes with the help of AI.
+    <div className="w-full pt-20">
+      <section className="container mx-auto text-center py-20 px-4">
+        <h1 className="text-5xl font-bold mb-4">Build Your Professional Resume in Minutes</h1>
+        <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+          Our AI-powered tool helps you parse your existing resume or build a new one from scratch, with professional templates and AI-driven content suggestions.
+        </p>
+        <Card className="w-full max-w-2xl mx-auto shadow-xl">
+          <CardHeader>
+            <CardTitle className="text-2xl">Get Started</CardTitle>
+            <CardDescription>
+              Upload your resume to have our AI parse it, or start fresh.
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-8">
+          <CardContent className="p-6">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center h-48">
                 <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
@@ -50,7 +54,7 @@ export function LandingPage({
                 onDrop={onDrop}
                 onClick={triggerFileSelect}
               >
-                <UploadCloud className="h-16 w-16 text-gray-400 mb-4" />
+                <UploadCloud className="h-12 w-12 text-gray-400 mb-4" />
                 <p className="text-lg font-semibold text-gray-700">Drag & drop your resume here</p>
                 <p className="text-muted-foreground">or click to browse</p>
                 <p className="text-xs text-gray-500 mt-2">PDF, DOCX, or TXT</p>
@@ -65,7 +69,7 @@ export function LandingPage({
             )}
             <div className="mt-6 flex items-center justify-center space-x-4">
               <div className="flex-grow border-t border-gray-300"></div>
-              <span className="text-muted-foreground">OR</span>
+              <span className="text-muted-foreground text-sm">OR</span>
               <div className="flex-grow border-t border-gray-300"></div>
             </div>
             <div className="mt-6 text-center">
@@ -76,35 +80,41 @@ export function LandingPage({
             </div>
           </CardContent>
         </Card>
-      </main>
-      <section className="w-full max-w-4xl mt-12">
-        <h2 className="text-2xl font-bold text-center mb-6">Key Features</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex flex-col items-center text-center p-4">
-            <Bot className="h-12 w-12 text-primary mb-4" />
-            <h3 className="text-lg font-semibold mb-2">AI-Powered Content</h3>
-            <p className="text-muted-foreground">
-              Generate professional resume content with the help of our AI assistant.
-            </p>
-          </div>
-          <div className="flex flex-col items-center text-center p-4">
-            <FileText className="h-12 w-12 text-primary mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Multiple Templates</h3>
-            <p className="text-muted-foreground">
-              Choose from a variety of professionally designed resume templates.
-            </p>
-          </div>
-          <div className="flex flex-col items-center text-center p-4">
-            <UploadCloud className="h-12 w-12 text-primary mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Easy Import</h3>
-            <p className="text-muted-foreground">
-              Import your existing resume in PDF, DOCX, or TXT format.
-            </p>
+      </section>
+
+      <section className="bg-muted py-20 px-4">
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose ResumeForge?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="p-6">
+              <Bot className="h-12 w-12 text-primary mb-4 mx-auto" />
+              <h3 className="text-xl font-semibold mb-2">AI-Powered Suggestions</h3>
+              <p className="text-muted-foreground">
+                Enhance your resume summary and job descriptions with intelligent, impactful suggestions.
+              </p>
+            </div>
+            <div className="p-6">
+              <FileCheck className="h-12 w-12 text-primary mb-4 mx-auto" />
+              <h3 className="text-xl font-semibold mb-2">Instant Parsing</h3>
+              <p className="text-muted-foreground">
+                Upload your resume in PDF, DOCX, or TXT format and watch our AI instantly structure your data.
+              </p>
+            </div>
+            <div className="p-6">
+              <Palette className="h-12 w-12 text-primary mb-4 mx-auto" />
+              <h3 className="text-xl font-semibold mb-2">Professional Templates</h3>
+              <p className="text-muted-foreground">
+                Choose from modern and classic templates with customizable colors, fonts, and layouts.
+              </p>
+            </div>
           </div>
         </div>
       </section>
-      <footer className="w-full max-w-4xl mt-12 text-center text-muted-foreground">
-        <p>&copy; 2024 ResumeForge. All rights reserved.</p>
+
+      <footer className="py-8 px-4">
+        <div className="container mx-auto text-center text-muted-foreground">
+          <p>&copy; 2024 ResumeForge. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
