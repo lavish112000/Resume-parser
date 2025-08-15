@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, UploadCloud, FileText, Bot, FileCheck, Palette } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface LandingPageProps {
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -85,7 +86,8 @@ export function LandingPage({
 
       <section className="bg-background py-20 px-4">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-12">Choose Your Template</h2>
+          <h2 className="text-3xl font-bold mb-2">Choose Your Template</h2>
+          <p className="text-muted-foreground mb-8">Select a template to see how your resume could look.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <Card className="hover:shadow-primary/20 hover:shadow-lg transition-shadow">
               <CardHeader>
@@ -124,22 +126,22 @@ export function LandingPage({
       <section className="bg-muted/20 py-20 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Why Choose ResumeForge?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="p-6 animate-fade-in-up [animation-delay:0.6s]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-6 text-center animate-fade-in-up [animation-delay:0.6s]">
               <Bot className="h-12 w-12 text-primary mb-4 mx-auto" />
               <h3 className="text-xl font-semibold mb-2">AI-Powered Suggestions</h3>
               <p className="text-muted-foreground">
                 Enhance your resume summary and job descriptions with intelligent, impactful suggestions.
               </p>
             </div>
-            <div className="p-6 animate-fade-in-up [animation-delay:0.8s]">
+            <div className="p-6 text-center animate-fade-in-up [animation-delay:0.8s]">
               <FileCheck className="h-12 w-12 text-primary mb-4 mx-auto" />
               <h3 className="text-xl font-semibold mb-2">Instant Parsing</h3>
               <p className="text-muted-foreground">
                 Upload your resume in PDF, DOCX, or TXT format and watch our AI instantly structure your data.
               </p>
             </div>
-            <div className="p-6 animate-fade-in-up [animation-delay:1s]">
+            <div className="p-6 text-center animate-fade-in-up [animation-delay:1s]">
               <Palette className="h-12 w-12 text-primary mb-4 mx-auto" />
               <h3 className="text-xl font-semibold mb-2">Professional Templates</h3>
               <p className="text-muted-foreground">
@@ -149,6 +151,17 @@ export function LandingPage({
           </div>
         </div>
       </section>
+      
+      <section className="py-20 px-4">
+        <div className="container mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-2">Need some inspiration?</h2>
+            <p className="text-muted-foreground mb-8">Check out our resume examples to get started.</p>
+            <Link href="/examples">
+                <Button size="lg">Browse Examples</Button>
+            </Link>
+        </div>
+      </section>
+
 
       <footer className="py-8 px-4">
         <div className="container mx-auto text-center text-muted-foreground">

@@ -1,6 +1,6 @@
 'use client';
 
-import { Hammer, Download, RefreshCcw, BookOpen } from 'lucide-react';
+import { Hammer, Download, RefreshCcw, BookOpen, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -34,12 +34,20 @@ export function AppHeader({ isEditing = false, onDownload, onReset }: AppHeaderP
                 </Button>
             </>
             ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/examples">
+                    <Button variant="ghost">
+                        <FileText className="mr-2"/>
+                        Examples
+                    </Button>
+                </Link>
                 <Link href="/blog">
                     <Button variant="ghost">
                         <BookOpen className="mr-2"/>
                         Blog
                     </Button>
                 </Link>
+              </div>
             )}
         </div>
       </div>
