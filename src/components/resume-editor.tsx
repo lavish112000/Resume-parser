@@ -73,28 +73,30 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
 
   return (
     <FormProvider {...methods}>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen bg-muted/40">
         <AppHeader isEditing onDownload={handleDownload} onReset={onReset}/>
-        <main className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 pt-24 p-8 bg-muted/40">
-          <div className="flex flex-col gap-4">
+        <main className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-8 pt-20 px-4 sm:px-8">
+          <div className="flex flex-col gap-4 overflow-hidden">
             <TemplateOptions
               template={template}
               setTemplate={handleTemplateChange}
               styleOptions={styleOptions}
               setStyleOptions={setStyleOptions}
             />
-            <ScrollArea className="h-[calc(100vh-12rem)] rounded-lg border bg-card p-1">
+            <ScrollArea className="h-full rounded-lg border bg-card">
               <ResumeForm />
             </ScrollArea>
           </div>
 
-          <ScrollArea className="h-[calc(100vh-8rem)] rounded-lg border bg-white shadow-lg">
-            <ResumePreview
-              data={resumeData}
-              template={template}
-              styleOptions={styleOptions}
-            />
-          </ScrollArea>
+          <div className="hidden lg:block overflow-hidden pb-8">
+             <ScrollArea className="h-full bg-white rounded-lg shadow-lg">
+                <ResumePreview
+                data={resumeData}
+                template={template}
+                styleOptions={styleOptions}
+                />
+            </ScrollArea>
+          </div>
         </main>
       </div>
     </FormProvider>
