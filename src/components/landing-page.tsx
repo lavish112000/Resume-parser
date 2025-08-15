@@ -4,6 +4,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, UploadCloud, FileText, Bot, FileCheck, Palette } from 'lucide-react';
+import Image from 'next/image';
 
 interface LandingPageProps {
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -80,6 +81,44 @@ export function LandingPage({
             </div>
           </CardContent>
         </Card>
+      </section>
+
+      <section className="bg-background py-20 px-4">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-12">Choose Your Template</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="hover:shadow-primary/20 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle>Modern</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Image
+                  src="https://placehold.co/400x565.png"
+                  alt="Modern resume template"
+                  data-ai-hint="resume modern"
+                  width={400}
+                  height={565}
+                  className="rounded-md border"
+                />
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-primary/20 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle>Classic</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Image
+                  src="https://placehold.co/400x565.png"
+                  alt="Classic resume template"
+                  data-ai-hint="resume classic"
+                  width={400}
+                  height={565}
+                  className="rounded-md border"
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </section>
 
       <section className="bg-muted/20 py-20 px-4">
