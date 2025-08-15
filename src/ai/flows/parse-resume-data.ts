@@ -22,7 +22,7 @@ export type ParseResumeInput = z.infer<typeof ParseResumeInputSchema>;
 
 const ParseResumeOutputSchema = z.object({
   name: z.string().describe('The name of the resume owner.'),
-  email: z.string().email().describe('The email address of the resume owner.'),
+  email: z.string().describe('The email address of the resume owner.'),
   phone: z.string().describe('The phone number of the resume owner.'),
   summary: z.string().describe('A brief summary or objective statement from the resume.'),
   experience: z
