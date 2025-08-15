@@ -8,9 +8,11 @@ import { initialData } from '@/lib/initial-data';
 import { ResumeEditor } from '@/components/resume-editor';
 import { AppHeader } from '@/components/app-header';
 import { LandingPage } from '@/components/landing-page';
+import { VerificationStep } from '@/components/verification-step';
 
 export default function Home() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const [parsedData, setParsedData] = useState<ResumeData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const { toast } = useToast();
@@ -58,8 +60,8 @@ export default function Home() {
       try {
         const resumeDataUri = e.target?.result as string;
         if (!resumeDataUri) throw new Error('Could not read file.');
-        const parsedData = await parseResume({ resumeDataUri });
-        setResumeData(parsedData);
+        const data = await parseResume({ resumeDataUri });
+        setParsedData(data);
       } catch (error) {
         console.error(error);
         toast({
@@ -67,7 +69,7 @@ export default function Home() {
           title: 'Parsing Failed',
           description: 'Could not extract data from the resume. Please try another file or create one from scratch.',
         });
-        setResumeData(null);
+        setParsedData(null);
       } finally {
         setIsLoading(false);
       }
@@ -75,12 +77,18 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
+  const handleVerificationComplete = (data: ResumeData) => {
+    setResumeData(data);
+    setParsedData(null);
+  };
+  
   const handleCreateFromScratch = () => {
     setResumeData(initialData);
   };
 
   const resetApp = () => {
     setResumeData(null);
+    setParsedData(null);
     setFileName(null);
     if(fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -89,6 +97,22 @@ export default function Home() {
 
   if (resumeData) {
     return <ResumeEditor initialResumeData={resumeData} onReset={resetApp} />;
+  }
+
+  if (parsedData) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <AppHeader />
+        <main className="flex-grow pt-20">
+          <VerificationStep 
+            parsedData={parsedData} 
+            onComplete={handleVerificationComplete} 
+            onCancel={resetApp}
+            fileName={fileName}
+          />
+        </main>
+      </div>
+    );
   }
 
   return (
