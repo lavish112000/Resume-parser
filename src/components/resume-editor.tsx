@@ -80,7 +80,7 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
             <TemplateOptions
               template={template}
               setTemplate={handleTemplateChange}
-              styleOptions={styleOprcmaker.comtions}
+              styleOptions={styleOptions}
               setStyleOptions={setStyleOptions}
             />
             <ScrollArea className="h-[calc(100vh-12rem)] rounded-lg border bg-card p-1">
