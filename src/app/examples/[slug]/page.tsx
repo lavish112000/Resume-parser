@@ -1,5 +1,6 @@
 
 import { AppHeader } from '@/components/app-header';
+import { AtsTemplate } from '@/components/templates/ats';
 import { ModernTemplate } from '@/components/templates/modern';
 import { resumeExamples } from '@/lib/example-data';
 import { notFound } from 'next/navigation';
@@ -11,6 +12,25 @@ export default function ExampleDetailPage({ params }: { params: { slug: string }
 
   if (!example) {
     notFound();
+  }
+
+  const renderTemplate = () => {
+      switch(example.template) {
+        case 'ats':
+            return <AtsTemplate data={example.data} styleOptions={{
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '11pt',
+                color: '#000000',
+                margin: '1.5cm'
+            }} />
+        default:
+             return <ModernTemplate data={example.data} styleOptions={{
+                fontFamily: 'Inter',
+                fontSize: '11pt',
+                color: '#5DADE2',
+                margin: '1.5cm'
+            }} />
+      }
   }
 
   return (
@@ -28,12 +48,7 @@ export default function ExampleDetailPage({ params }: { params: { slug: string }
         </div>
 
         <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-            <ModernTemplate data={example.data} styleOptions={{
-                fontFamily: 'Inter',
-                fontSize: '11pt',
-                color: '#5DADE2',
-                margin: '1.5cm'
-            }} />
+            {renderTemplate()}
         </div>
         
       </main>

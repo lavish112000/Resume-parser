@@ -42,11 +42,11 @@ type ResumeEditorProps = {
 };
 
 export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) {
-  const [template, setTemplate] = useState<Template>('modern');
+  const [template, setTemplate] = useState<Template>('ats');
   const [styleOptions, setStyleOptions] = useState<StyleOptions>({
     fontFamily: 'Inter',
     fontSize: '11pt',
-    color: '#5DADE2', // professional blue
+    color: '#000000',
     margin: '1.5cm',
   });
   
@@ -61,6 +61,15 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
   const handleDownload = () => {
     window.print();
   };
+  
+  const handleTemplateChange = (newTemplate: Template) => {
+    setTemplate(newTemplate);
+    if(newTemplate === 'ats') {
+        setStyleOptions(prev => ({...prev, color: '#000000', fontFamily: 'Arial, sans-serif' }));
+    } else {
+        setStyleOptions(prev => ({...prev, color: '#5DADE2', fontFamily: 'Inter' }));
+    }
+  }
 
   return (
     <FormProvider {...methods}>
@@ -70,8 +79,8 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
           <div className="flex flex-col gap-4">
             <TemplateOptions
               template={template}
-              setTemplate={setTemplate}
-              styleOptions={styleOptions}
+              setTemplate={handleTemplateChange}
+              styleOptions={styleOprcmaker.comtions}
               setStyleOptions={setStyleOptions}
             />
             <ScrollArea className="h-[calc(100vh-12rem)] rounded-lg border bg-card p-1">

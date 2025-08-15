@@ -1,10 +1,11 @@
 
-import type { ResumeData } from './types';
+import type { ResumeData, Template } from './types';
 
-export const resumeExamples: { title: string; description: string; slug: string; data: ResumeData }[] = [
+export const resumeExamples: { title: string; description: string; slug: string; data: ResumeData, template: Template }[] = [
   {
-    title: 'Software Engineer',
+    title: 'Software Engineer (Modern)',
     slug: 'software-engineer',
+    template: 'modern',
     description: 'A strong resume for a mid-level software engineer, highlighting technical skills and project impact.',
     data: {
       name: 'Alex Doe',
@@ -37,8 +38,9 @@ export const resumeExamples: { title: string; description: string; slug: string;
     }
   },
   {
-    title: 'Marketing Manager',
+    title: 'Marketing Manager (ATS)',
     slug: 'marketing-manager',
+    template: 'ats',
     description: 'A results-oriented resume for a marketing manager, focusing on campaign success and metrics.',
     data: {
       name: 'Jane Smith',
@@ -71,8 +73,9 @@ export const resumeExamples: { title: string; description: string; slug: string;
     }
   },
   {
-    title: 'Graphic Designer',
+    title: 'Graphic Designer (Classic)',
     slug: 'graphic-designer',
+    template: 'classic',
     description: 'A creative resume for a graphic designer, showcasing design skills and a strong portfolio.',
     data: {
       name: 'Sam Wilson',

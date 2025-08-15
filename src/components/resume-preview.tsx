@@ -1,6 +1,7 @@
 'use client';
 import { ModernTemplate } from '@/components/templates/modern';
 import { ClassicTemplate } from '@/components/templates/classic';
+import { AtsTemplate } from '@/components/templates/ats';
 import type { ResumeData, StyleOptions, Template } from '@/lib/types';
 
 type ResumePreviewProps = {
@@ -16,6 +17,8 @@ export function ResumePreview({ data, template, styleOptions }: ResumePreviewPro
         return <ModernTemplate data={data} styleOptions={styleOptions} />;
       case 'classic':
         return <ClassicTemplate data={data} styleOptions={styleOptions} />;
+      case 'ats':
+        return <AtsTemplate data={data} styleOptions={styleOptions} />;
       default:
         return <ModernTemplate data={data} styleOptions={styleOptions} />;
     }

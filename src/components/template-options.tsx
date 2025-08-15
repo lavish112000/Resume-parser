@@ -56,6 +56,7 @@ export function TemplateOptions({
             <SelectContent>
               <SelectItem value="modern">Modern</SelectItem>
               <SelectItem value="classic">Classic</SelectItem>
+              <SelectItem value="ats">ATS Friendly</SelectItem>
             </SelectContent>
           </Select>
         </div>
