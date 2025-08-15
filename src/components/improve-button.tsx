@@ -78,19 +78,25 @@ export function ImproveButton({ fieldName }: ImproveButtonProps) {
               <Loader2 className="h-8 w-8 animate-spin" />
             </div>
           ) : (
-             <div className="flex-grow grid grid-cols-2 gap-4 h-[calc(80vh-10rem)]">
-              <div>
-                <Badge variant="outline" className="mb-2">Original</Badge>
-                <div className="h-full border rounded-md p-2 text-sm overflow-y-auto bg-muted/50">{originalContent}</div>
-              </div>
-              <div>
-                <Badge variant="secondary" className="mb-2">Suggestion</Badge>
-                <Textarea
-                  value={improvedContent}
-                  onChange={(e) => setImprovedContent(e.target.value)}
-                  className="h-full border rounded-md text-sm"
+             <div className="flex-grow flex flex-col">
+                <Badge variant="secondary" className="mb-2 w-fit">Suggested Changes</Badge>
+                <DiffEditor
+                    original={originalContent}
+                    modified={improvedContent}
+                    language="markdown"
+                    theme="vs-light"
+                    options={{
+                        readOnly: false,
+                        renderSideBySide: true,
+                        minimap: { enabled: false },
+                        scrollBeyondLastLine: false,
+                    }}
+                    onMount={(editor) => {
+                        editor.onDidUpdateDiff(() => {
+                            setImprovedContent(editor.getModel()?.modified.getValue() || '');
+                        });
+                    }}
                 />
-              </div>
             </div>
           )}
           <DialogFooter>
@@ -101,10 +107,4 @@ export function ImproveButton({ fieldName }: ImproveButtonProps) {
       </Dialog>
     </>
   );
-}
-
-
-// A simple Textarea for the improve dialog since DiffEditor is not installed
-function Textarea(props: React.ComponentProps<'textarea'>) {
-    return <textarea {...props} />;
 }
