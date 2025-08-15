@@ -27,13 +27,13 @@ export function LandingPage({
   fileInputRef,
 }: LandingPageProps) {
   return (
-    <div className="w-full pt-20">
+    <div className="w-full pt-20 animate-fade-in-up">
       <section className="container mx-auto text-center py-20 px-4">
-        <h1 className="text-5xl font-bold mb-4">Build Your Professional Resume in Minutes</h1>
-        <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+        <h1 className="text-5xl font-bold mb-4 animate-slide-in-from-top">Build Your Professional Resume in Minutes</h1>
+        <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-slide-in-from-top [animation-delay:0.2s]">
           Our AI-powered tool helps you parse your existing resume or build a new one from scratch, with professional templates and AI-driven content suggestions.
         </p>
-        <Card className="w-full max-w-2xl mx-auto shadow-xl">
+        <Card className="w-full max-w-2xl mx-auto shadow-xl animate-scale-in [animation-delay:0.4s]">
           <CardHeader>
             <CardTitle className="text-2xl">Get Started</CardTitle>
             <CardDescription>
@@ -49,13 +49,13 @@ export function LandingPage({
               </div>
             ) : (
               <div
-                className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-muted/20 transition-colors"
                 onDragOver={onDragOver}
                 onDrop={onDrop}
                 onClick={triggerFileSelect}
               >
                 <UploadCloud className="h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-lg font-semibold text-gray-700">Drag & drop your resume here</p>
+                <p className="text-lg font-semibold">Drag & drop your resume here</p>
                 <p className="text-muted-foreground">or click to browse</p>
                 <p className="text-xs text-gray-500 mt-2">PDF, DOCX, or TXT</p>
                 <input
@@ -82,25 +82,25 @@ export function LandingPage({
         </Card>
       </section>
 
-      <section className="bg-muted py-20 px-4">
+      <section className="bg-muted/20 py-20 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Why Choose ResumeForge?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="p-6">
+            <div className="p-6 animate-fade-in-up [animation-delay:0.6s]">
               <Bot className="h-12 w-12 text-primary mb-4 mx-auto" />
               <h3 className="text-xl font-semibold mb-2">AI-Powered Suggestions</h3>
               <p className="text-muted-foreground">
                 Enhance your resume summary and job descriptions with intelligent, impactful suggestions.
               </p>
             </div>
-            <div className="p-6">
+            <div className="p-6 animate-fade-in-up [animation-delay:0.8s]">
               <FileCheck className="h-12 w-12 text-primary mb-4 mx-auto" />
               <h3 className="text-xl font-semibold mb-2">Instant Parsing</h3>
               <p className="text-muted-foreground">
                 Upload your resume in PDF, DOCX, or TXT format and watch our AI instantly structure your data.
               </p>
             </div>
-            <div className="p-6">
+            <div className="p-6 animate-fade-in-up [animation-delay:1s]">
               <Palette className="h-12 w-12 text-primary mb-4 mx-auto" />
               <h3 className="text-xl font-semibold mb-2">Professional Templates</h3>
               <p className="text-muted-foreground">

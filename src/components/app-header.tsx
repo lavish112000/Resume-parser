@@ -12,7 +12,7 @@ type AppHeaderProps = {
 
 export function AppHeader({ isEditing = false, onDownload, onReset }: AppHeaderProps) {
   return (
-    <header className="w-full p-4 bg-white/80 backdrop-blur-md border-b fixed top-0 left-0 z-50">
+    <header className="w-full p-4 bg-background/80 backdrop-blur-md border-b border-border/50 fixed top-0 left-0 z-50">
       <div className="max-w-screen-2xl mx-auto flex justify-between items-center">
         <Link href="/" className="flex items-center gap-3">
             <div className="bg-primary p-2 rounded-lg">
