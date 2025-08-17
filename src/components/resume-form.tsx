@@ -295,5 +295,3 @@ export function ResumeForm() {
     </form>
   );
 }
-
-    
