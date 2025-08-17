@@ -49,6 +49,14 @@ export function ImproveButton({ fieldName }: ImproveButtonProps) {
   };
 
   const handleOpen = () => {
+    if (!originalContent) {
+        toast({
+            variant: 'destructive',
+            title: 'Content is empty',
+            description: 'Please write some content before using the AI assistant.',
+        });
+        return;
+    }
     setIsOpen(true);
     handleImprove();
   }
@@ -84,7 +92,7 @@ export function ImproveButton({ fieldName }: ImproveButtonProps) {
                     original={originalContent}
                     modified={improvedContent}
                     language="markdown"
-                    theme="vs-light"
+                    theme="vs-dark"
                     options={{
                         readOnly: false,
                         renderSideBySide: true,
