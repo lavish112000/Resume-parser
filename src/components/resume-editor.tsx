@@ -90,15 +90,24 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
 
           <div className="hidden lg:block overflow-hidden pb-8">
              <ScrollArea className="h-full bg-white rounded-lg shadow-lg">
-                <ResumePreview
-                data={resumeData}
-                template={template}
-                styleOptions={styleOptions}
-                />
+                <div id="resume-preview">
+                    <ResumePreview
+                    data={resumeData}
+                    template={template}
+                    styleOptions={styleOptions}
+                    />
+                </div>
             </ScrollArea>
           </div>
         </main>
       </div>
+       <div className="lg:hidden">
+          <ResumePreview
+            data={resumeData}
+            template={template}
+            styleOptions={styleOptions}
+          />
+       </div>
     </FormProvider>
   );
 }
