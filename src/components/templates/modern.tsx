@@ -1,7 +1,7 @@
 'use client';
 
 import type { ResumeData, StyleOptions } from '@/lib/types';
-import { Mail, Phone, ExternalLink } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
 import { CSSProperties } from 'react';
 
 type TemplateProps = {
@@ -20,7 +20,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
   } as CSSProperties;
 
   return (
-    <div className="a4-page bg-white text-gray-800" style={cssVariables}>
+    <div className="a4-page bg-white" style={cssVariables}>
       <style jsx global>{`
         .a4-page {
           width: 210mm;
@@ -30,23 +30,25 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
           font-family: var(--font-family), sans-serif;
           font-size: var(--font-size);
           line-height: 1.5;
+          color: #1f2937;
         }
         h1, h2, h3, h4 { color: var(--primary-color); }
         h1 { font-size: 2.25em; margin-bottom: 0.25rem; font-weight: 700; }
         h2 { font-size: 1.25em; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
         h3 { font-size: 1.1em; font-weight: 600; }
-        .contact-info { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem; font-size: 0.9em; }
+        .contact-info { display: flex; gap: 1.5rem; justify-center; margin-bottom: 1.5rem; font-size: 0.9em; }
         .contact-item { display: flex; align-items: center; gap: 0.5rem; }
-        .section-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-        @media (min-width: 1024px) {
-            .section-grid { grid-template-columns: 2fr 1fr; }
-        }
+        .section-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
         .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .skill-item { background-color: #e8e8e8; color: #333; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.9em; }
         .experience-item, .education-item { margin-bottom: 1.25rem; }
-        .experience-header { display: flex; justify-content: space-between; align-items: baseline; }
+        .experience-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
         .job-title { font-size: 1.1em; font-weight: bold; }
         .company-name { font-style: italic; }
+        .prose {
+            --tw-prose-body: #374151;
+            --tw-prose-bullets: #4b5563;
+        }
       `}</style>
       
       <header className="text-center mb-6">
@@ -70,7 +72,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
                 <h3>{job.title} | <span className="company-name">{job.company}</span></h3>
                 <span className="text-sm text-gray-600">{job.dates}</span>
               </div>
-              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: job.description.replace(/\n/g, '<br />') }} />
+              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
             </div>
           ))}
         </div>
@@ -82,7 +84,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
               <h3>{edu.degree}</h3>
               <p className="text-sm text-gray-700">{edu.institution}</p>
               <p className="text-xs text-gray-500">{edu.dates}</p>
-              <p className="text-xs">{edu.description}</p>
+              {edu.description && <p className="text-sm text-gray-700">{edu.description}</p>}
             </div>
           ))}
 

@@ -19,7 +19,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
   } as CSSProperties;
 
   return (
-    <div className="a4-page bg-white text-gray-800" style={cssVariables}>
+    <div className="a4-page bg-white" style={cssVariables}>
       <style jsx global>{`
         .a4-page {
           width: 210mm;
@@ -29,17 +29,22 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
           font-family: var(--font-family), sans-serif;
           font-size: var(--font-size);
           line-height: 1.5;
+          color: #1f2937;
         }
         .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 1rem; margin-bottom: 1.5rem; }
-        h1 { font-size: 2.5em; margin-bottom: 0.25rem; font-weight: 700; color: #333; }
+        h1 { font-size: 2.5em; margin-bottom: 0.25rem; font-weight: 700; color: #111827; }
         .contact-info { display: flex; gap: 1.5rem; justify-content: center; font-size: 0.9em; }
         .contact-item { display: flex; align-items: center; gap: 0.5rem; }
-        h2 { font-size: 1.3em; color: var(--primary-color); border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
-        h3 { font-size: 1.1em; font-weight: bold; }
-        .experience-item, .education-item { margin-bottom: 1.5rem; }
+        h2 { font-size: 1.2em; text-transform: uppercase; color: var(--primary-color); letter-spacing: 0.05em; border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
+        h3 { font-size: 1.05em; font-weight: bold; color: #111827 }
+        .experience-item, .education-item { margin-bottom: 1.25rem; }
         .item-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
         .skills-section { text-align: center; }
         .skills-list { display: inline-block; text-align: left; }
+        .prose {
+            --tw-prose-body: #374151;
+            --tw-prose-bullets: #4b5563;
+        }
       `}</style>
       
       <header className="header">
@@ -63,7 +68,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
               <h3>{job.title}, <span>{job.company}</span></h3>
               <span className="text-sm text-gray-600">{job.dates}</span>
             </div>
-            <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: job.description.replace(/\n/g, '<br />') }} />
+            <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
           </div>
         ))}
       </section>
@@ -77,7 +82,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
               <span className="text-sm text-gray-600">{edu.dates}</span>
             </div>
             <p>{edu.degree}</p>
-            <p className="text-xs">{edu.description}</p>
+            {edu.description && <p className="text-sm text-gray-700">{edu.description}</p>}
           </div>
         ))}
       </section>
