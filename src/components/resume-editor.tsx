@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -10,6 +11,7 @@ import { ResumePreview } from '@/components/resume-preview';
 import { TemplateOptions } from '@/components/template-options';
 import type { ResumeData, Template, StyleOptions } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const experienceSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -75,35 +77,42 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
     <FormProvider {...methods}>
       <div className="flex flex-col h-screen bg-muted/40">
         <AppHeader isEditing onDownload={handleDownload} onReset={onReset}/>
-        <main className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-8 pt-20 px-4 sm:px-8">
-          <div className="flex flex-col gap-4 overflow-hidden">
-            <TemplateOptions
-              template={template}
-              setTemplate={handleTemplateChange}
-              styleOptions={styleOptions}
-              setStyleOptions={setStyleOptions}
-            />
-            <ScrollArea className="h-full rounded-lg border bg-card">
-              <ResumeForm />
-            </ScrollArea>
-          </div>
-
-          <div className="hidden lg:block overflow-hidden pb-8">
-             <ScrollArea className="h-full rounded-lg">
-                <div id="resume-preview" className="p-8 bg-muted/50 flex justify-center">
-                    <div className="transform scale-[0.8] origin-top shadow-2xl">
-                        <ResumePreview
-                        data={resumeData}
-                        template={template}
-                        styleOptions={styleOptions}
-                        />
-                    </div>
-                </div>
-            </ScrollArea>
-          </div>
+        <main className="flex-grow flex flex-col pt-20 px-4 sm:px-8">
+            <div className="pb-4">
+                <TemplateOptions
+                    template={template}
+                    setTemplate={handleTemplateChange}
+                    styleOptions={styleOptions}
+                    setStyleOptions={setStyleOptions}
+                />
+            </div>
+            <Tabs defaultValue="form" className="flex-grow flex flex-col">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="form">Form</TabsTrigger>
+                    <TabsTrigger value="preview">Preview</TabsTrigger>
+                </TabsList>
+                <TabsContent value="form" className="flex-grow overflow-hidden">
+                    <ScrollArea className="h-full rounded-lg border bg-card">
+                        <ResumeForm />
+                    </ScrollArea>
+                </TabsContent>
+                <TabsContent value="preview" className="flex-grow overflow-hidden">
+                     <ScrollArea className="h-full rounded-lg">
+                        <div id="resume-preview" className="p-8 bg-muted/50 flex justify-center">
+                            <div className="a4-page-container">
+                                <ResumePreview
+                                data={resumeData}
+                                template={template}
+                                styleOptions={styleOptions}
+                                />
+                            </div>
+                        </div>
+                    </ScrollArea>
+                </TabsContent>
+            </Tabs>
         </main>
       </div>
-       <div className="lg:hidden">
+       <div className="hidden">
           <ResumePreview
             data={resumeData}
             template={template}
@@ -113,3 +122,4 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
     </FormProvider>
   );
 }
+

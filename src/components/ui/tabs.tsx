@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -53,3 +54,4 @@ const TabsContent = React.forwardRef<
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
 export { Tabs, TabsList, TabsTrigger, TabsContent }
+
