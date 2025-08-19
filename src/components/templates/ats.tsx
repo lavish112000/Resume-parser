@@ -55,6 +55,17 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         .skills-category { margin-bottom: 0.75rem; }
         .skills-category-title { font-weight: bold; margin-bottom: 0.25rem; }
         .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0; margin: 0; list-style-type: none; }
+        .prose {
+            --tw-prose-body: #1f2937;
+            --tw-prose-bullets: #4b5563;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+        }
+         .prose li {
+            margin-bottom: 0.25rem;
+        }
       `}</style>
       
       <header className="header">
