@@ -9,12 +9,23 @@ import { ResumeEditor } from '@/components/resume-editor';
 import { AppHeader } from '@/components/app-header';
 import { LandingPage } from '@/components/landing-page';
 import { VerificationStep } from '@/components/verification-step';
+import { ResumePreview } from '@/components/resume-preview';
+import type { StyleOptions, Template } from '@/lib/types';
 
 export default function Home() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [parsedData, setParsedData] = useState<ResumeData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [template, setTemplate] = useState<Template>('ats');
+  const [styleOptions, setStyleOptions] = useState<StyleOptions>({
+    fontFamily: 'Inter',
+    fontSize: '11pt',
+    color: '#000000',
+    margin: '1.5cm',
+    lineHeight: '1.4',
+    skillSpacing: '0.5rem',
+  });
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -95,8 +106,32 @@ export default function Home() {
     }
   }
 
+  const handleDownload = () => {
+    window.print();
+  };
+
   if (resumeData) {
-    return <ResumeEditor initialResumeData={resumeData} onReset={resetApp} />;
+    return (
+      <>
+        <ResumeEditor 
+          initialResumeData={resumeData} 
+          onReset={resetApp} 
+          onDownload={handleDownload}
+          template={template}
+          setTemplate={setTemplate}
+          styleOptions={styleOptions}
+          setStyleOptions={setStyleOptions}
+          setLiveResumeData={setResumeData}
+        />
+        <div id="printable-resume" className="hidden">
+          <ResumePreview
+            data={resumeData}
+            template={template}
+            styleOptions={styleOptions}
+          />
+        </div>
+      </>
+    );
   }
 
   if (parsedData) {

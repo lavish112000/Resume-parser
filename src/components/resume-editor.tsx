@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -63,19 +63,25 @@ const resumeSchema = z.object({
 type ResumeEditorProps = {
   initialResumeData: ResumeData;
   onReset: () => void;
+  onDownload: () => void;
+  template: Template;
+  setTemplate: (template: Template) => void;
+  styleOptions: StyleOptions;
+  setStyleOptions: (options: StyleOptions) => void;
+  setLiveResumeData: (data: ResumeData) => void;
 };
 
-export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) {
+export function ResumeEditor({ 
+  initialResumeData, 
+  onReset,
+  onDownload,
+  template,
+  setTemplate,
+  styleOptions,
+  setStyleOptions,
+  setLiveResumeData,
+}: ResumeEditorProps) {
   const [activeTab, setActiveTab] = useState('form');
-  const [template, setTemplate] = useState<Template>('ats');
-  const [styleOptions, setStyleOptions] = useState<StyleOptions>({
-    fontFamily: 'Inter',
-    fontSize: '11pt',
-    color: '#000000',
-    margin: '1.5cm',
-    lineHeight: '1.4',
-    skillSpacing: '0.5rem',
-  });
   
   const methods = useForm<ResumeData>({
     resolver: zodResolver(resumeSchema),
@@ -85,23 +91,27 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
 
   const resumeData = methods.watch();
 
-  const handleDownload = () => {
-    window.print();
-  };
+  useEffect(() => {
+    const subscription = methods.watch((value) => {
+      setLiveResumeData(value as ResumeData);
+    });
+    return () => subscription.unsubscribe();
+  }, [methods, setLiveResumeData]);
+
   
   const handleTemplateChange = (newTemplate: Template) => {
     setTemplate(newTemplate);
     if(newTemplate === 'ats') {
-        setStyleOptions(prev => ({...prev, color: '#000000', fontFamily: 'Arial, sans-serif' }));
+        setStyleOptions({...styleOptions, color: '#000000', fontFamily: 'Arial, sans-serif' });
     } else {
-        setStyleOptions(prev => ({...prev, color: '#5DADE2', fontFamily: 'Inter' }));
+        setStyleOptions({...styleOptions, color: '#5DADE2', fontFamily: 'Inter' });
     }
   }
 
   return (
     <FormProvider {...methods}>
       <div className="flex flex-col h-screen bg-muted/40">
-        <AppHeader isEditing onDownload={handleDownload} onReset={onReset}/>
+        <AppHeader isEditing onDownload={onDownload} onReset={onReset}/>
         <main className="flex-grow flex flex-col pt-20 px-4 sm:px-8">
             <div className="pb-4">
                 <TemplateOptions
@@ -137,13 +147,6 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
             </Tabs>
         </main>
       </div>
-       <div id="printable-resume" className="hidden">
-          <ResumePreview
-            data={resumeData}
-            template={template}
-            styleOptions={styleOptions}
-          />
-       </div>
     </FormProvider>
   );
 }
