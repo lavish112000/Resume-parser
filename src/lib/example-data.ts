@@ -34,7 +34,16 @@ export const resumeExamples: { title: string; description: string; slug: string;
           description: 'Specialization in Machine Learning'
         }
       ],
-      skills: ['Python', 'Django', 'React', 'TypeScript', 'AWS', 'Docker', 'PostgreSQL', 'Microservices']
+      skills: [
+        { name: 'Python' },
+        { name: 'Django' },
+        { name: 'React' },
+        { name: 'TypeScript' },
+        { name: 'AWS' },
+        { name: 'Docker' },
+        { name: 'PostgreSQL' },
+        { name: 'Microservices' },
+      ]
     }
   },
   {
@@ -69,7 +78,15 @@ export const resumeExamples: { title: string; description: string; slug: string;
           description: 'Graduated with honors'
         }
       ],
-      skills: ['Digital Marketing', 'SEO/SEM', 'Content Strategy', 'Campaign Management', 'Google Analytics', 'Team Leadership', 'HubSpot']
+      skills: [
+        { name: 'Digital Marketing' },
+        { name: 'SEO/SEM' },
+        { name: 'Content Strategy' },
+        { name: 'Campaign Management' },
+        { name: 'Google Analytics' },
+        { name: 'Team Leadership' },
+        { name: 'HubSpot' },
+      ]
     }
   },
   {
@@ -104,7 +121,13 @@ export const resumeExamples: { title: string; description: string; slug: string;
           description: ''
         }
       ],
-      skills: ['Adobe Creative Suite (Photoshop, Illustrator, InDesign)', 'Branding & Identity', 'UI/UX Design', 'Typography', 'Illustration']
+      skills: [
+        { name: 'Adobe Creative Suite (Photoshop, Illustrator, InDesign)' },
+        { name: 'Branding & Identity' },
+        { name: 'UI/UX Design' },
+        { name: 'Typography' },
+        { name: 'Illustration' },
+      ]
     }
   }
 ];

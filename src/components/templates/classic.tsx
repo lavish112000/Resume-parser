@@ -89,7 +89,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
 
       <section className="skills-section">
         <h2>Skills</h2>
-        <p className="skills-list">{skills?.join(' · ')}</p>
+        <p className="skills-list">{skills?.map(s => s.name).join(' · ')}</p>
       </section>
     </div>
   );

@@ -25,7 +25,10 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
       const sectionArray = [...(editableData[section] as any[])];
       sectionArray[index] = { ...sectionArray[index], ...value };
       setEditableData({ ...editableData, [section]: sectionArray });
-    } else {
+    } else if (section === 'skills') {
+        setEditableData({ ...editableData, skills: value.split(',').map((s: string) => ({ name: s.trim() })) });
+    }
+     else {
       setEditableData({ ...editableData, [section]: value });
     }
   };
@@ -123,8 +126,8 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
           {/* Skills */}
           <div className="mb-6">
             <h3 className="text-xl font-bold mb-3 border-b pb-2">Skills</h3>
-             {renderField("Skills", editableData.skills.join(', '), () => setIsEditing(null), 
-                <Input value={editableData.skills.join(', ')} onChange={(e) => handleInputChange('skills', e.target.value.split(',').map(s => s.trim()))} />
+             {renderField("Skills", editableData.skills.map(s => s.name).join(', '), () => setIsEditing(null), 
+                <Input value={editableData.skills.map(s => s.name).join(', ')} onChange={(e) => handleInputChange('skills', e.target.value)} />
               )}
           </div>
           

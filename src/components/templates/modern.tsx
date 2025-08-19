@@ -91,7 +91,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
           <h2>Skills</h2>
           <div className="skills-list">
             {skills?.map((skill, index) => (
-              <span key={index} className="skill-item">{skill}</span>
+              <span key={index} className="skill-item">{skill.name}</span>
             ))}
           </div>
         </div>

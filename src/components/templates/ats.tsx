@@ -88,7 +88,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         <h2>Skills</h2>
         <ul className="skills-list">
           {skills?.map((skill, index) => (
-            <li key={index}>{skill}</li>
+            <li key={index}>{skill.name}</li>
           ))}
         </ul>
       </section>
