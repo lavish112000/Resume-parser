@@ -17,6 +17,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
     '--font-size': '11pt',
     '--margin': styleOptions.margin,
     '--line-height': styleOptions.lineHeight,
+    '--skill-spacing': styleOptions.skillSpacing,
   } as CSSProperties;
   
   const formatDescription = (description: string) => {
@@ -70,7 +71,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         .skills-section { margin-top: 1.25rem; }
         .skills-category { margin-bottom: 0.75rem; }
         .skills-category-title { font-weight: bold; margin-bottom: 0.25rem; }
-        .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0; margin: 0; list-style-type: none; }
+        .skills-list { display: flex; flex-wrap: wrap; gap: 0.25rem var(--skill-spacing); padding: 0; margin: 0; list-style-type: none; }
         .prose {
             --tw-prose-body: #1f2937;
             --tw-prose-bullets: #4b5563;

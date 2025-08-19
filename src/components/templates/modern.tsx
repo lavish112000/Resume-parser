@@ -18,6 +18,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
     '--font-size': styleOptions.fontSize,
     '--margin': styleOptions.margin,
     '--line-height': styleOptions.lineHeight,
+    '--skill-spacing': styleOptions.skillSpacing,
   } as CSSProperties;
   
   const formatDescription = (description: string) => {
@@ -132,7 +133,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
         .section-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
         .skills-category { margin-bottom: 1rem; }
         .skills-category-title { font-size: 1em; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary-color); }
-        .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .skills-list { display: flex; flex-wrap: wrap; gap: var(--skill-spacing); }
         .skill-item { background-color: #e8e8e8; color: #333; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.9em; }
         .experience-item, .education-item { margin-bottom: 1.25rem; }
         .experience-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }

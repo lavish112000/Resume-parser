@@ -17,6 +17,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
     '--font-size': styleOptions.fontSize,
     '--margin': styleOptions.margin,
     '--line-height': styleOptions.lineHeight,
+    '--skill-spacing': styleOptions.skillSpacing,
   } as CSSProperties;
   
   const formatDescription = (description: string) => {
@@ -133,7 +134,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
         {skills?.map((category, index) => (
             <div key={index} className="skills-category">
                 <span className="skills-category-title">{category.category}:</span>
-                <ul className="skills-list">
+                <ul className="skills-list" style={{ gap: `var(--skill-spacing)` }}>
                     {category.skills.map((skill, skillIndex) => (
                         <li key={skillIndex}>{skill.name}</li>
                     ))}

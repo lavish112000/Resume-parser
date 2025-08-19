@@ -19,4 +19,5 @@ export type StyleOptions = {
   color: string;
   margin: string;
   lineHeight: string;
+  skillSpacing: string;
 };
