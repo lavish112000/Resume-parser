@@ -35,18 +35,17 @@ const ParseResumeOutputSchema = z.object({
       })
     )
     .describe('A list of work experience entries.'),
-  education:
-    z
-      .array(
-        z.object({
-          institution: z.string().describe('The name of the educational institution.'),
-          degree: z.string().describe('The degree obtained.'),
-          dates: z.string().describe('The graduation dates.'),
-          description: z.string().describe('Additional details about education.'),
-        })
-      )
-      .describe('A list of education entries')
-      .optional(),
+  education: z
+    .array(
+      z.object({
+        institution: z.string().describe('The name of the educational institution.'),
+        degree: z.string().describe('The degree obtained.'),
+        dates: z.string().describe('The graduation dates.'),
+        description: z.string().describe('Additional details about education.').optional(),
+      })
+    )
+    .describe('A list of education entries')
+    .optional(),
   skills: z
     .array(
       z.object({
@@ -59,7 +58,7 @@ const ParseResumeOutputSchema = z.object({
     .array(
       z.object({
         label: z.string().describe('The label for the link (e.g., "Portfolio", "LinkedIn", "GitHub").'),
-        url: z.string().url().describe('The URL of the link.'),
+        url: z.string().url('The provided URL is not valid.').describe('The URL of the link.'),
       })
     )
     .describe('A list of personal or professional links.')
@@ -85,7 +84,7 @@ const prompt = ai.definePrompt({
   - Experience (job title, company, dates, description)
   - Education (institution, degree, dates, description)
   - Skills (categorize them logically, e.g., "Programming Languages", "Frameworks", "Tools", "Design")
-  - Links (e.g., personal website, LinkedIn, GitHub portfolio)
+  - Links (e.g., personal website, LinkedIn, GitHub portfolio). Only include links that have a valid URL.
 
   Resume Data: {{media url=resumeDataUri}}
 
