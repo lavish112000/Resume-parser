@@ -1,7 +1,7 @@
 'use client';
 
 import type { ResumeData, StyleOptions } from '@/lib/types';
-import { Mail, Phone, Link as LinkIcon } from 'lucide-react';
+import { Mail, Phone, Linkedin, Github, Globe } from 'lucide-react';
 import { CSSProperties } from 'react';
 
 type TemplateProps = {
@@ -27,6 +27,17 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
       .map(line => `<li>${line.replace(/^- ?/, '').trim()}</li>`)
       .join('');
     return `<ul>${listItems}</ul>`;
+  };
+  
+  const getLinkIcon = (label: string) => {
+    const lowerCaseLabel = label.toLowerCase();
+    if (lowerCaseLabel.includes('linkedin')) {
+      return <Linkedin size={14} />;
+    }
+    if (lowerCaseLabel.includes('github')) {
+      return <Github size={14} />;
+    }
+    return <Globe size={14} />;
   };
 
   const mainContent = (
@@ -145,10 +156,10 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
           <div className="contact-item"><Mail size={14} /> {email}</div>
           <div className="contact-item"><Phone size={14} /> {phone}</div>
            {links?.map((link, index) => (
-            <div key={index} className="contact-item">
-              <LinkIcon size={14} />
-              <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
-            </div>
+            <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" className="contact-item">
+               {getLinkIcon(link.label)}
+               <span>{link.label}</span>
+            </a>
           ))}
         </div>
       </header>

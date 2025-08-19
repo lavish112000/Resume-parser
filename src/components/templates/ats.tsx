@@ -1,6 +1,7 @@
 'use client';
 import type { ResumeData, StyleOptions } from '@/lib/types';
 import { CSSProperties } from 'react';
+import { Linkedin, Github, Globe } from 'lucide-react';
 
 type TemplateProps = {
   data: ResumeData;
@@ -26,6 +27,18 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
       .join('');
     return `<ul>${listItems}</ul>`;
   };
+  
+  const getLinkIcon = (label: string) => {
+    const lowerCaseLabel = label.toLowerCase();
+    if (lowerCaseLabel.includes('linkedin')) {
+      return <Linkedin size={14} />;
+    }
+    if (lowerCaseLabel.includes('github')) {
+      return <Github size={14} />;
+    }
+    return <Globe size={14} />;
+  };
+
 
   return (
     <div className="a4-page bg-white text-black" style={cssVariables}>
@@ -77,7 +90,10 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
           <div className="contact-item">{phone}</div>
            {links?.map((link, index) => (
             <div key={index} className="contact-item">
-              <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+              <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                {getLinkIcon(link.label)}
+                {link.label}
+              </a>
             </div>
           ))}
         </div>
