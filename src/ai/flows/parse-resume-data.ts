@@ -47,7 +47,7 @@ const ParseResumeOutputSchema = z.object({
       )
       .describe('A list of education entries')
       .optional(),
-  skills: z.array(z.string()).describe('A list of skills.'),
+  skills: z.array(z.object({name: z.string()})).describe('A list of skills.'),
 });
 export type ParseResumeOutput = z.infer<typeof ParseResumeOutputSchema>;
 

@@ -268,7 +268,7 @@ export function ResumeForm() {
                     {skillFields.map((field, index) => (
                     <div key={field.id} className="flex items-center gap-2">
                         <Input
-                        {...register(`skills.${index}`)}
+                        {...register(`skills.${index}.name`)}
                         placeholder={`Skill ${index + 1}`}
                         />
                         <Button
@@ -285,7 +285,7 @@ export function ResumeForm() {
                 <Button
                     type="button"
                     variant="outline"
-                    onClick={() => appendSkill('')}
+                    onClick={() => appendSkill({ name: '' })}
                 >
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Skill
                 </Button>
