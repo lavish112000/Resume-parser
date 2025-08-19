@@ -10,7 +10,7 @@ type TemplateProps = {
 };
 
 export function ModernTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills } = data;
+  const { name, email, phone, summary, experience, education, skills, customSections } = data;
   
   const cssVariables = {
     '--primary-color': styleOptions.color,
@@ -18,6 +18,66 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
     '--font-size': styleOptions.fontSize,
     '--margin': styleOptions.margin,
   } as CSSProperties;
+
+  const mainContent = (
+    <>
+      <h2>Experience</h2>
+      {experience?.map((job, index) => (
+        <div key={index} className="experience-item">
+          <div className="experience-header">
+            <h3>{job.title} | <span className="company-name">{job.company}</span></h3>
+            <span className="text-sm text-gray-600">{job.dates}</span>
+          </div>
+          <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+        </div>
+      ))}
+      {customSections?.map((section, index) => {
+        if (index % 2 === 0) { // even index custom sections go to main content
+          return (
+            <div key={index}>
+              <h2>{section.title}</h2>
+              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+            </div>
+          )
+        }
+        return null;
+      })}
+    </>
+  );
+
+  const sidebarContent = (
+    <>
+      <h2>Education</h2>
+      {education?.map((edu, index) => (
+        <div key={index} className="education-item">
+          <h3>{edu.degree}</h3>
+          <p className="text-sm text-gray-700">{edu.institution}</p>
+          <p className="text-xs text-gray-500">{edu.dates}</p>
+          {edu.description && <p className="text-sm text-gray-700">{edu.description}</p>}
+        </div>
+      ))}
+
+      <h2>Skills</h2>
+      <div className="skills-list">
+        {skills?.map((skill, index) => (
+          <span key={index} className="skill-item">{skill.name}</span>
+        ))}
+      </div>
+
+      {customSections?.map((section, index) => {
+        if (index % 2 !== 0) { // odd index custom sections go to sidebar
+          return (
+            <div key={index}>
+              <h2>{section.title}</h2>
+              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+            </div>
+          )
+        }
+        return null;
+      })}
+    </>
+  );
+
 
   return (
     <div className="a4-page bg-white" style={cssVariables}>
@@ -65,35 +125,11 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
 
       <div className="section-grid">
         <div className="main-content">
-          <h2>Experience</h2>
-          {experience?.map((job, index) => (
-            <div key={index} className="experience-item">
-              <div className="experience-header">
-                <h3>{job.title} | <span className="company-name">{job.company}</span></h3>
-                <span className="text-sm text-gray-600">{job.dates}</span>
-              </div>
-              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
-            </div>
-          ))}
+          {mainContent}
         </div>
         
         <div className="sidebar-content">
-          <h2>Education</h2>
-          {education?.map((edu, index) => (
-            <div key={index} className="education-item">
-              <h3>{edu.degree}</h3>
-              <p className="text-sm text-gray-700">{edu.institution}</p>
-              <p className="text-xs text-gray-500">{edu.dates}</p>
-              {edu.description && <p className="text-sm text-gray-700">{edu.description}</p>}
-            </div>
-          ))}
-
-          <h2>Skills</h2>
-          <div className="skills-list">
-            {skills?.map((skill, index) => (
-              <span key={index} className="skill-item">{skill.name}</span>
-            ))}
-          </div>
+          {sidebarContent}
         </div>
       </div>
     </div>

@@ -1,6 +1,11 @@
 import type { ParseResumeOutput } from '@/ai/flows/parse-resume-data';
 
-export type ResumeData = ParseResumeOutput;
+export type ResumeData = ParseResumeOutput & {
+  customSections?: {
+    title: string;
+    description: string;
+  }[];
+};
 
 export type Template = 'modern' | 'classic' | 'ats';
 

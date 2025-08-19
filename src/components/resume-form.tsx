@@ -41,6 +41,16 @@ export function ResumeForm() {
       name: "skills"
   });
 
+  const {
+    fields: customSectionFields,
+    append: appendCustomSection,
+    remove: removeCustomSection,
+  } = useFieldArray({
+    control,
+    name: 'customSections',
+  });
+
+
   return (
     <form className="space-y-6 p-6">
       <Card>
@@ -294,7 +304,76 @@ export function ResumeForm() {
                 </Button>
             </AccordionContent>
         </AccordionItem>
+        {customSectionFields.map((field, index) => (
+          <AccordionItem key={field.id} value={`custom-${index}`}>
+            <AccordionTrigger>
+              <div className="flex justify-between w-full items-center">
+                <FormField
+                  control={control}
+                  name={`customSections.${index}.title`}
+                  render={({ field }) => (
+                    <FormItem className="flex-grow">
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Custom Section Title"
+                          className="text-xl font-semibold border-none focus:ring-0 p-0"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeCustomSection(index)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pl-2 space-y-4">
+              <Card className="bg-muted/30">
+                <CardContent className="pt-6">
+                  <FormField
+                    control={control}
+                    name={`customSections.${index}.description`}
+                    render={({ field: textAreaField }) => (
+                      <FormItem>
+                        <FormLabel>Content</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Textarea
+                              {...textAreaField}
+                              placeholder="Describe your custom section content..."
+                              rows={4}
+                            />
+                            <ImproveButton fieldName={`customSections.${index}.description`} />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+
       </Accordion>
+      <div className="mt-6">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => appendCustomSection({ title: 'New Section', description: '' })}
+        >
+          <PlusCircle className="mr-2 h-4 w-4" /> Add Section
+        </Button>
+      </div>
     </form>
   );
 }

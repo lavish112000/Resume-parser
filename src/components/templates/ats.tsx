@@ -8,7 +8,7 @@ type TemplateProps = {
 };
 
 export function AtsTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills } = data;
+  const { name, email, phone, summary, experience, education, skills, customSections } = data;
 
   const cssVariables = {
     '--primary-color': styleOptions.color,
@@ -92,6 +92,14 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
           ))}
         </ul>
       </section>
+
+       {customSections?.map((section, index) => (
+        <section key={index}>
+          <h2>{section.title}</h2>
+          <div className="description text-sm" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+        </section>
+      ))}
+
     </div>
   );
 }

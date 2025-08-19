@@ -31,4 +31,11 @@ export const initialData: ResumeData = {
     },
   ],
   skills: [{name: "React"},{name: "Node.js"},{name: "TypeScript"},{name: "JavaScript"},{name: "HTML"},{name: "CSS"}],
+  customSections: [
+    {
+      title: 'Projects',
+      description:
+        '• Built a personal portfolio website using Next.js and Tailwind CSS\n• Contributed to open-source projects on GitHub',
+    },
+  ],
 };

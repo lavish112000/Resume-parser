@@ -9,7 +9,7 @@ type TemplateProps = {
 };
 
 export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills } = data;
+  const { name, email, phone, summary, experience, education, skills, customSections } = data;
 
   const cssVariables = {
     '--primary-color': styleOptions.color,
@@ -91,6 +91,14 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
         <h2>Skills</h2>
         <p className="skills-list">{skills?.map(s => s.name).join(' · ')}</p>
       </section>
+
+      {customSections?.map((section, index) => (
+        <section key={index}>
+          <h2>{section.title}</h2>
+          <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+        </section>
+      ))}
+
     </div>
   );
 }
