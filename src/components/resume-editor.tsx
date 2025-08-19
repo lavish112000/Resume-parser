@@ -115,7 +115,7 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
                 </TabsContent>
                 <TabsContent value="preview" className="flex-grow overflow-hidden">
                      <ScrollArea className="h-full rounded-lg">
-                        <div id="resume-preview" className="p-8 bg-muted/50 flex justify-center">
+                        <div className="p-8 bg-muted/50 flex justify-center">
                             <div className="a4-page-container">
                                 <ResumePreview
                                 data={resumeData}
@@ -129,7 +129,7 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
             </Tabs>
         </main>
       </div>
-       <div className="hidden">
+       <div id="printable-resume" className="hidden">
           <ResumePreview
             data={resumeData}
             template={template}

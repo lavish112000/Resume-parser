@@ -65,25 +65,23 @@ body {
   body {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    background-color: white !important;
   }
-  body * {
-    visibility: hidden;
+  body > div:not(#printable-resume) {
+    display: none;
   }
-  #resume-preview,
-  #resume-preview * {
-    visibility: visible;
-  }
-  #resume-preview {
-    position: fixed;
-    left: 0;
+  #printable-resume {
+    display: block !important;
+    position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    transform: scale(1);
+  }
+  .a4-page {
     margin: 0;
     padding: 0;
-    overflow: visible;
+    box-shadow: none;
+    border: none;
   }
   .page-break {
     page-break-before: always;
