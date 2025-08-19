@@ -30,7 +30,20 @@ export const initialData: ResumeData = {
       description: 'GPA: 3.8, Magna Cum Laude',
     },
   ],
-  skills: [{name: "React"},{name: "Node.js"},{name: "TypeScript"},{name: "JavaScript"},{name: "HTML"},{name: "CSS"}],
+  skills: [
+    { 
+      category: 'Programming Languages', 
+      skills: [{ name: 'JavaScript' }, { name: 'TypeScript' }, { name: 'Python' }] 
+    },
+    { 
+      category: 'Frameworks & Libraries', 
+      skills: [{ name: 'React' }, { name: 'Node.js' }, { name: 'Next.js' }, { name: 'Tailwind CSS' }] 
+    },
+    { 
+      category: 'Tools', 
+      skills: [{ name: 'Git' }, { name: 'Docker' }, { name: 'Webpack' }] 
+    }
+  ],
   customSections: [
     {
       title: 'Projects',

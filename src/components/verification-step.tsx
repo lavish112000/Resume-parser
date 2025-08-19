@@ -20,13 +20,20 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
   const [editableData, setEditableData] = useState<ResumeData>(parsedData);
   const [isEditing, setIsEditing] = useState<string | null>(null);
 
-  const handleInputChange = (section: keyof ResumeData, value: any, index?: number) => {
-    if (index !== undefined && Array.isArray(editableData[section])) {
+  const handleInputChange = (section: keyof ResumeData, value: any, index?: number, subIndex?: number) => {
+    if (section === 'skills' && index !== undefined && subIndex !== undefined) {
+        const newSkills = JSON.parse(JSON.stringify(editableData.skills));
+        newSkills[index].skills[subIndex].name = value;
+        setEditableData({ ...editableData, skills: newSkills });
+    } else if (section === 'skills' && index !== undefined) {
+        const newSkills = JSON.parse(JSON.stringify(editableData.skills));
+        newSkills[index].category = value;
+        setEditableData({ ...editableData, skills: newSkills });
+    }
+    else if (index !== undefined && Array.isArray(editableData[section])) {
       const sectionArray = [...(editableData[section] as any[])];
       sectionArray[index] = { ...sectionArray[index], ...value };
       setEditableData({ ...editableData, [section]: sectionArray });
-    } else if (section === 'skills') {
-        setEditableData({ ...editableData, skills: value.split(',').map((s: string) => ({ name: s.trim() })) });
     }
      else {
       setEditableData({ ...editableData, [section]: value });
@@ -124,12 +131,25 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
           </div>
 
           {/* Skills */}
-          <div className="mb-6">
-            <h3 className="text-xl font-bold mb-3 border-b pb-2">Skills</h3>
-             {renderField("Skills", editableData.skills.map(s => s.name).join(', '), () => setIsEditing(null), 
-                <Input value={editableData.skills.map(s => s.name).join(', ')} onChange={(e) => handleInputChange('skills', e.target.value)} />
-              )}
-          </div>
+            <div className="mb-6">
+                <h3 className="text-xl font-bold mb-3 border-b pb-2">Skills</h3>
+                {editableData.skills?.map((cat, catIndex) => (
+                <div key={catIndex} className="p-4 border rounded-lg mb-4 bg-muted/20">
+                    {renderField(`Category: ${cat.category}`, cat.category, () => setIsEditing(null),
+                        <Input value={cat.category} onChange={(e) => handleInputChange('skills', e.target.value, catIndex)} />
+                    )}
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                        {cat.skills.map((skill, skillIndex) => (
+                            <div key={skillIndex}>
+                               {renderField(`Skill`, skill.name, () => setIsEditing(null),
+                                    <Input value={skill.name} onChange={(e) => handleInputChange('skills', e.target.value, catIndex, skillIndex)} />
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                ))}
+            </div>
           
           <div className="flex justify-end gap-4 mt-8">
             <Button variant="outline" onClick={onCancel}>

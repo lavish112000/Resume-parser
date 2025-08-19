@@ -32,6 +32,15 @@ const customSectionSchema = z.object({
   description: z.string().min(1, 'Section content is required'),
 });
 
+const skillSchema = z.object({
+  name: z.string().min(1, 'Skill cannot be empty'),
+});
+
+const skillCategorySchema = z.object({
+  category: z.string().min(1, 'Category title is required'),
+  skills: z.array(skillSchema).min(1, 'At least one skill is required in a category'),
+});
+
 
 const resumeSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -40,7 +49,7 @@ const resumeSchema = z.object({
   summary: z.string().min(1, 'Summary is required'),
   experience: z.array(experienceSchema),
   education: z.array(educationSchema),
-  skills: z.array(z.object({name: z.string().min(1, "Skill cannot be empty")})).min(1, "At least one skill is required"),
+  skills: z.array(skillCategorySchema).min(1, "At least one skill category is required"),
   customSections: z.array(customSectionSchema).optional(),
 });
 

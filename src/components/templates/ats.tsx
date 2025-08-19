@@ -41,6 +41,9 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         .company-name { font-style: normal; }
         .description ul { list-style-type: disc; margin: 0; padding-left: 1.25rem; }
         .description li { margin-bottom: 0.25rem; }
+        .skills-section { margin-top: 1.25rem; }
+        .skills-category { margin-bottom: 0.75rem; }
+        .skills-category-title { font-weight: bold; margin-bottom: 0.25rem; }
         .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0; margin: 0; list-style-type: none; }
       `}</style>
       
@@ -65,7 +68,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
               <h3>{job.title}, <span className="company-name">{job.company}</span></h3>
               <span className="text-sm">{job.dates}</span>
             </div>
-            <div className="description text-sm" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+            <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
           </div>
         ))}
       </section>
@@ -83,20 +86,26 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
           </div>
         ))}
       </section>
-
-      <section>
+      
+      <section className="skills-section">
         <h2>Skills</h2>
-        <ul className="skills-list">
-          {skills?.map((skill, index) => (
-            <li key={index}>{skill.name}</li>
-          ))}
-        </ul>
+        {skills?.map((category, index) => (
+            <div key={index} className="skills-category">
+                <p className="skills-category-title">{category.category}:</p>
+                <ul className="skills-list">
+                {category.skills?.map((skill, skillIndex) => (
+                    <li key={skillIndex}>{skill.name}</li>
+                ))}
+                </ul>
+            </div>
+        ))}
       </section>
+
 
        {customSections?.map((section, index) => (
         <section key={index}>
           <h2>{section.title}</h2>
-          <div className="description text-sm" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+          <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
         </section>
       ))}
 

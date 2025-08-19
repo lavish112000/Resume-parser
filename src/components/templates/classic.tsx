@@ -39,8 +39,12 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
         h3 { font-size: 1.05em; font-weight: bold; color: #111827 }
         .experience-item, .education-item { margin-bottom: 1.25rem; }
         .item-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
-        .skills-section { text-align: center; }
-        .skills-list { display: inline-block; text-align: left; }
+        .skills-section { margin-top: 1.5rem; }
+        .skills-category { margin-bottom: 0.5rem; }
+        .skills-category-title { font-weight: bold; color: #111827; display: inline-block; margin-right: 0.5rem; }
+        .skills-list { display: inline; padding: 0; list-style-type: none; }
+        .skills-list li { display: inline; }
+        .skills-list li:not(:last-child)::after { content: ' · '; margin: 0 0.25rem; }
         .prose {
             --tw-prose-body: #374151;
             --tw-prose-bullets: #4b5563;
@@ -89,7 +93,16 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
 
       <section className="skills-section">
         <h2>Skills</h2>
-        <p className="skills-list">{skills?.map(s => s.name).join(' · ')}</p>
+        {skills?.map((category, index) => (
+            <div key={index} className="skills-category">
+                <span className="skills-category-title">{category.category}:</span>
+                <ul className="skills-list">
+                    {category.skills.map((skill, skillIndex) => (
+                        <li key={skillIndex}>{skill.name}</li>
+                    ))}
+                </ul>
+            </div>
+        ))}
       </section>
 
       {customSections?.map((section, index) => (

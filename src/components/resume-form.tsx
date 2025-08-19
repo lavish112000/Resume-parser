@@ -11,8 +11,86 @@ import { PlusCircle, Trash2 } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ImproveButton } from '@/components/improve-button';
 
+function SkillsForm() {
+    const { control } = useFormContext<ResumeData>();
+    const { fields: skillCategoryFields, append: appendSkillCategory, remove: removeSkillCategory } = useFieldArray({
+        control,
+        name: "skills",
+    });
+
+    return (
+        <div>
+            {skillCategoryFields.map((categoryField, categoryIndex) => (
+                <Card key={categoryField.id} className="bg-muted/30 mb-4">
+                    <CardHeader className="flex flex-row items-center justify-between py-3">
+                        <FormField
+                            control={control}
+                            name={`skills.${categoryIndex}.category`}
+                            render={({ field }) => (
+                                <FormItem className="flex-grow">
+                                    <FormControl>
+                                        <Input {...field} placeholder="Skill Category (e.g., Programming Languages)" className="text-lg font-semibold border-none focus:ring-0 p-0" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="button" variant="ghost" size="icon" onClick={() => removeSkillCategory(categoryIndex)}>
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
+                        <SkillInputs categoryIndex={categoryIndex} />
+                    </CardContent>
+                </Card>
+            ))}
+            <Button type="button" variant="outline" onClick={() => appendSkillCategory({ category: 'New Category', skills: [{ name: '' }] })}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Skill Category
+            </Button>
+        </div>
+    );
+}
+
+function SkillInputs({ categoryIndex }: { categoryIndex: number }) {
+    const { control, register } = useFormContext<ResumeData>();
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: `skills.${categoryIndex}.skills`,
+    });
+
+    return (
+        <div className="space-y-2">
+             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                {fields.map((field, skillIndex) => (
+                    <div key={field.id} className="flex items-center gap-2 bg-background/50 p-2 rounded-md">
+                        <FormField
+                            control={control}
+                            name={`skills.${categoryIndex}.skills.${skillIndex}.name`}
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                <FormControl>
+                                    <Input {...field} placeholder="Skill" className="h-8" />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(skillIndex)} className="h-8 w-8 shrink-0">
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
+                    </div>
+                ))}
+            </div>
+            <Button type="button" size="sm" variant="outline" onClick={() => append({ name: '' })}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Skill
+            </Button>
+        </div>
+    );
+}
+
+
 export function ResumeForm() {
-  const { control, register, getValues } = useFormContext<ResumeData>();
+  const { control, getValues } = useFormContext<ResumeData>();
 
   const {
     fields: experienceFields,
@@ -32,15 +110,6 @@ export function ResumeForm() {
     name: 'education',
   });
   
-  const {
-    fields: skillFields,
-    append: appendSkill,
-    remove: removeSkill,
-  } = useFieldArray({
-      control,
-      name: "skills"
-  });
-
   const {
     fields: customSectionFields,
     append: appendCustomSection,
@@ -274,34 +343,7 @@ export function ResumeForm() {
                 <h3 className="text-xl font-semibold">Skills</h3>
             </AccordionTrigger>
             <AccordionContent className="pl-2 space-y-4">
-                <div className="flex flex-wrap gap-2">
-                    {skillFields.map((field, index) => (
-                    <div key={field.id} className="flex items-center gap-2 bg-muted/40 p-2 rounded-md">
-                        <Input
-                        {...register(`skills.${index}.name`)}
-                        placeholder={`Skill`}
-                        className="h-8"
-                        />
-                        <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeSkill(index)}
-                        className="h-8 w-8"
-                        >
-                        <Trash2 className="h-4 w-4" />
-                        </Button>
-                    </div>
-                    ))}
-                </div>
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => appendSkill({ name: '' })}
-                    className="mt-2"
-                >
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add Skill
-                </Button>
+                <SkillsForm />
             </AccordionContent>
         </AccordionItem>
         {customSectionFields.map((field, index) => (
