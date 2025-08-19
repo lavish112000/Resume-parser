@@ -16,6 +16,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
     '--font-family': 'Arial, sans-serif',
     '--font-size': '11pt',
     '--margin': styleOptions.margin,
+    '--line-height': styleOptions.lineHeight,
   } as CSSProperties;
   
   const formatDescription = (description: string) => {
@@ -50,7 +51,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
           margin: 0 auto;
           font-family: var(--font-family);
           font-size: var(--font-size);
-          line-height: 1.4;
+          line-height: var(--line-height);
           color: #111827;
         }
         .header { text-align: left; margin-bottom: 1.5rem; }

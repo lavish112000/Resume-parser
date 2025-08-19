@@ -30,6 +30,7 @@ const colors = [
 const fonts = ['Inter', 'Roboto', 'Lato', 'Merriweather', 'Georgia'];
 const fontSizes = ['10pt', '10.5pt', '11pt', '11.5pt', '12pt'];
 const margins = ['1.25cm', '1.5cm', '1.75cm', '2cm', '2.25cm'];
+const lineHeights = ['1.3', '1.4', '1.5', '1.6', '1.7'];
 
 export function TemplateOptions({
   template,
@@ -46,7 +47,7 @@ export function TemplateOptions({
       <CardHeader>
         <CardTitle>Design Options</CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div className="space-y-2">
           <Label>Template</Label>
           <Select value={template} onValueChange={(value: Template) => setTemplate(value)}>
@@ -106,6 +107,17 @@ export function TemplateOptions({
             </SelectTrigger>
             <SelectContent>
               {margins.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label>Line Spacing</Label>
+          <Select value={styleOptions.lineHeight} onValueChange={(v) => handleStyleChange('lineHeight', v)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select spacing" />
+            </SelectTrigger>
+            <SelectContent>
+              {lineHeights.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>

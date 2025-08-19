@@ -18,4 +18,5 @@ export type StyleOptions = {
   fontSize: string;
   color: string;
   margin: string;
+  lineHeight: string;
 };

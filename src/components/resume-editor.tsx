@@ -73,6 +73,7 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
     fontSize: '11pt',
     color: '#000000',
     margin: '1.5cm',
+    lineHeight: '1.4',
   });
   
   const methods = useForm<ResumeData>({

@@ -17,6 +17,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
     '--font-family': styleOptions.fontFamily,
     '--font-size': styleOptions.fontSize,
     '--margin': styleOptions.margin,
+    '--line-height': styleOptions.lineHeight,
   } as CSSProperties;
   
   const formatDescription = (description: string) => {
@@ -116,7 +117,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
           margin: 0 auto;
           font-family: var(--font-family), sans-serif;
           font-size: var(--font-size);
-          line-height: 1.5;
+          line-height: var(--line-height);
           color: #1f2937;
         }
         h1, h2, h3, h4 { color: var(--primary-color); }

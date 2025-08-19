@@ -16,6 +16,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
     '--font-family': styleOptions.fontFamily,
     '--font-size': styleOptions.fontSize,
     '--margin': styleOptions.margin,
+    '--line-height': styleOptions.lineHeight,
   } as CSSProperties;
   
   const formatDescription = (description: string) => {
@@ -49,7 +50,7 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
           margin: 0 auto;
           font-family: var(--font-family), sans-serif;
           font-size: var(--font-size);
-          line-height: 1.5;
+          line-height: var(--line-height);
           color: #1f2937;
         }
         .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 1rem; margin-bottom: 1.5rem; }
