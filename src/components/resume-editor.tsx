@@ -41,6 +41,11 @@ const skillCategorySchema = z.object({
   skills: z.array(skillSchema).min(1, 'At least one skill is required in a category'),
 });
 
+const linkSchema = z.object({
+    label: z.string().min(1, 'Label is required'),
+    url: z.string().min(1, 'URL is required').url('Invalid URL format'),
+});
+
 
 const resumeSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -51,6 +56,7 @@ const resumeSchema = z.object({
   education: z.array(educationSchema),
   skills: z.array(skillCategorySchema).min(1, "At least one skill category is required"),
   customSections: z.array(customSectionSchema).optional(),
+  links: z.array(linkSchema).optional(),
 });
 
 
@@ -103,7 +109,7 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
                     setStyleOptions={setStyleOptions}
                 />
             </div>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow flex flex-col">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow flex flex-col min-h-0">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="form">Form</TabsTrigger>
                     <TabsTrigger value="preview">Preview</TabsTrigger>
@@ -139,4 +145,3 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
     </FormProvider>
   );
 }
-

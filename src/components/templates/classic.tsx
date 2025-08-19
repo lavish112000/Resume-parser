@@ -1,6 +1,6 @@
 'use client';
 import type { ResumeData, StyleOptions } from '@/lib/types';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Link as LinkIcon } from 'lucide-react';
 import { CSSProperties } from 'react';
 
 type TemplateProps = {
@@ -9,7 +9,7 @@ type TemplateProps = {
 };
 
 export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills, customSections } = data;
+  const { name, email, phone, links, summary, experience, education, skills, customSections } = data;
 
   const cssVariables = {
     '--primary-color': styleOptions.color,
@@ -43,8 +43,10 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
         }
         .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 1rem; margin-bottom: 1.5rem; }
         h1 { font-size: 2.5em; margin-bottom: 0.25rem; font-weight: 700; color: #111827; }
-        .contact-info { display: flex; gap: 1.5rem; justify-content: center; font-size: 0.9em; }
+        .contact-info { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; justify-content: center; font-size: 0.9em; }
         .contact-item { display: flex; align-items: center; gap: 0.5rem; }
+        .contact-item a { color: inherit; text-decoration: none; }
+        .contact-item a:hover { text-decoration: underline; }
         h2 { font-size: 1.2em; text-transform: uppercase; color: var(--primary-color); letter-spacing: 0.05em; border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
         h3 { font-size: 1.05em; font-weight: bold; color: #111827 }
         .experience-item, .education-item { margin-bottom: 1.25rem; }
@@ -59,6 +61,13 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
             --tw-prose-body: #374151;
             --tw-prose-bullets: #4b5563;
         }
+         .prose ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+        }
+         .prose li {
+            margin-bottom: 0.25rem;
+        }
       `}</style>
       
       <header className="header">
@@ -66,6 +75,12 @@ export function ClassicTemplate({ data, styleOptions }: TemplateProps) {
         <div className="contact-info">
           <div className="contact-item"><Mail size={14} /> {email}</div>
           <div className="contact-item"><Phone size={14} /> {phone}</div>
+           {links?.map((link, index) => (
+            <div key={index} className="contact-item">
+              <LinkIcon size={14} />
+              <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            </div>
+          ))}
         </div>
       </header>
 

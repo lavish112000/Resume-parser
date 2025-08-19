@@ -4,6 +4,10 @@ export const initialData: ResumeData = {
   name: 'John Doe',
   email: 'john.doe@email.com',
   phone: '123-456-7890',
+  links: [
+    { label: 'Website', url: 'johndoe.com' },
+    { label: 'LinkedIn', url: 'linkedin.com/in/johndoe' },
+  ],
   summary:
     'Innovative and deadline-driven Software Engineer with 5+ years of experience designing and developing user-centered digital products from initial concept to final, polished deliverable.',
   experience: [

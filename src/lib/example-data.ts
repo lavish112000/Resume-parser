@@ -11,6 +11,10 @@ export const resumeExamples: { title: string; description: string; slug: string;
       name: 'Alex Doe',
       email: 'alex.doe@email.com',
       phone: '111-222-3333',
+      links: [
+        { label: 'Portfolio', url: 'https://alexdoe.dev' },
+        { label: 'GitHub', url: 'https://github.com/alexdoe' },
+      ],
       summary: 'Innovative Software Engineer with 5+ years of experience in developing and deploying scalable web applications. Proficient in full-stack development with a strong focus on backend systems and cloud infrastructure. Passionate about writing clean, efficient code and solving complex problems.',
       experience: [
         {
@@ -35,14 +39,10 @@ export const resumeExamples: { title: string; description: string; slug: string;
         }
       ],
       skills: [
-        { name: 'Python' },
-        { name: 'Django' },
-        { name: 'React' },
-        { name: 'TypeScript' },
-        { name: 'AWS' },
-        { name: 'Docker' },
-        { name: 'PostgreSQL' },
-        { name: 'Microservices' },
+        { category: 'Languages', skills: [{ name: 'Python' }, { name: 'JavaScript/TS' }] },
+        { category: 'Backend', skills: [{ name: 'Django' }, { name: 'Node.js' }] },
+        { category: 'Frontend', skills: [{ name: 'React' }, { name: 'Next.js' }] },
+        { category: 'Infrastructure', skills: [{ name: 'AWS' }, { name: 'Docker' }, { name: 'PostgreSQL' }] },
       ]
     }
   },
@@ -55,6 +55,9 @@ export const resumeExamples: { title: string; description: string; slug: string;
       name: 'Jane Smith',
       email: 'jane.smith@email.com',
       phone: '444-555-6666',
+       links: [
+        { label: 'LinkedIn', url: 'https://linkedin.com/in/janesmith' },
+      ],
       summary: 'Dynamic and results-driven Marketing Manager with over 8 years of experience in leading successful marketing campaigns from concept to completion. Proven ability to drive brand growth, increase engagement, and deliver measurable results through data-driven strategies.',
       experience: [
         {
@@ -79,13 +82,9 @@ export const resumeExamples: { title: string; description: string; slug: string;
         }
       ],
       skills: [
-        { name: 'Digital Marketing' },
-        { name: 'SEO/SEM' },
-        { name: 'Content Strategy' },
-        { name: 'Campaign Management' },
-        { name: 'Google Analytics' },
-        { name: 'Team Leadership' },
-        { name: 'HubSpot' },
+        { category: 'Strategy', skills: [{ name: 'Digital Marketing' }, { name: 'Content Strategy' }, { name: 'Campaign Management' }] },
+        { category: 'Tools', skills: [{ name: 'Google Analytics' }, { name: 'HubSpot' }, { name: 'SEMrush' }] },
+        { category: 'Leadership', skills: [{ name: 'Team Leadership' }, { name: 'Budget Management' }] },
       ]
     }
   },
@@ -98,6 +97,10 @@ export const resumeExamples: { title: string; description: string; slug: string;
       name: 'Sam Wilson',
       email: 'sam.wilson@email.com',
       phone: '777-888-9999',
+      links: [
+        { label: 'Portfolio', url: 'https://samwilson.design' },
+        { label: 'Behance', url: 'https://behance.net/samwilson' },
+      ],
       summary: 'Highly creative and detail-oriented Graphic Designer with a passion for visual storytelling. Expertise in branding, print, and digital media. Seeking to leverage design skills to create compelling visual experiences. Portfolio available at samwilson.design.',
       experience: [
         {
@@ -122,11 +125,8 @@ export const resumeExamples: { title: string; description: string; slug: string;
         }
       ],
       skills: [
-        { name: 'Adobe Creative Suite (Photoshop, Illustrator, InDesign)' },
-        { name: 'Branding & Identity' },
-        { name: 'UI/UX Design' },
-        { name: 'Typography' },
-        { name: 'Illustration' },
+        { category: 'Design Software', skills: [{ name: 'Adobe Photoshop' }, { name: 'Illustrator' }, { name: 'InDesign' }, { name: 'Figma' }] },
+        { category: 'Core Skills', skills: [{ name: 'Branding & Identity' }, { name: 'UI/UX Design' }, { name: 'Typography' }, { name: 'Illustration' }] },
       ]
     }
   }

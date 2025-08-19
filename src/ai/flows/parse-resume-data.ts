@@ -55,6 +55,15 @@ const ParseResumeOutputSchema = z.object({
       })
     )
     .describe('A list of categorized skills.'),
+  links: z
+    .array(
+      z.object({
+        label: z.string().describe('The label for the link (e.g., "Portfolio", "LinkedIn", "GitHub").'),
+        url: z.string().url().describe('The URL of the link.'),
+      })
+    )
+    .describe('A list of personal or professional links.')
+    .optional(),
 });
 export type ParseResumeOutput = z.infer<typeof ParseResumeOutputSchema>;
 
@@ -76,6 +85,7 @@ const prompt = ai.definePrompt({
   - Experience (job title, company, dates, description)
   - Education (institution, degree, dates, description)
   - Skills (categorize them logically, e.g., "Programming Languages", "Frameworks", "Tools", "Design")
+  - Links (e.g., personal website, LinkedIn, GitHub portfolio)
 
   Resume Data: {{media url=resumeDataUri}}
 

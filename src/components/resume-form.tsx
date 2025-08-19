@@ -119,6 +119,15 @@ export function ResumeForm({ onShowPreview }: { onShowPreview: () => void }) {
     control,
     name: 'customSections',
   });
+  
+  const {
+    fields: linkFields,
+    append: appendLink,
+    remove: removeLink,
+  } = useFieldArray({
+    control,
+    name: 'links',
+  });
 
 
   return (
@@ -169,6 +178,41 @@ export function ResumeForm({ onShowPreview }: { onShowPreview: () => void }) {
               )}
             />
           </div>
+            <div>
+              <FormLabel>Links</FormLabel>
+              <div className="space-y-2 mt-2">
+                {linkFields.map((field, index) => (
+                  <div key={field.id} className="flex items-center gap-2">
+                    <FormField
+                        control={control}
+                        name={`links.${index}.label`}
+                        render={({ field }) => (
+                            <FormItem className="w-1/3">
+                                <FormControl><Input {...field} placeholder="Label (e.g., Portfolio)" /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={control}
+                        name={`links.${index}.url`}
+                        render={({ field }) => (
+                            <FormItem className="flex-grow">
+                                <FormControl><Input {...field} placeholder="URL" /></FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="button" variant="ghost" size="icon" onClick={() => removeLink(index)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendLink({ label: '', url: '' })}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Link
+              </Button>
+            </div>
         </CardContent>
       </Card>
       

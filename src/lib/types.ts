@@ -5,6 +5,10 @@ export type ResumeData = ParseResumeOutput & {
     title: string;
     description: string;
   }[];
+  links?: {
+    label: string;
+    url: string;
+  }[];
 };
 
 export type Template = 'modern' | 'classic' | 'ats';

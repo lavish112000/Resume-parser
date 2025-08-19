@@ -1,7 +1,7 @@
 'use client';
 
 import type { ResumeData, StyleOptions } from '@/lib/types';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Link as LinkIcon } from 'lucide-react';
 import { CSSProperties } from 'react';
 
 type TemplateProps = {
@@ -10,7 +10,7 @@ type TemplateProps = {
 };
 
 export function ModernTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills, customSections } = data;
+  const { name, email, phone, links, summary, experience, education, skills, customSections } = data;
   
   const cssVariables = {
     '--primary-color': styleOptions.color,
@@ -113,8 +113,10 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
         h2 { font-size: 1.25em; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
         h3 { font-size: 1.1em; font-weight: 600; }
         h4 { font-size: 1em; font-weight: 600; margin-bottom: 0.5rem; }
-        .contact-info { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem; font-size: 0.9em; }
+        .contact-info { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; justify-content: center; margin-bottom: 1.5rem; font-size: 0.9em; }
         .contact-item { display: flex; align-items: center; gap: 0.5rem; }
+        .contact-item a { color: inherit; text-decoration: none; }
+        .contact-item a:hover { text-decoration: underline; }
         .section-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
         .skills-category { margin-bottom: 1rem; }
         .skills-category-title { font-size: 1em; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary-color); }
@@ -128,6 +130,13 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
             --tw-prose-body: #374151;
             --tw-prose-bullets: #4b5563;
         }
+         .prose ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+        }
+         .prose li {
+            margin-bottom: 0.25rem;
+        }
       `}</style>
       
       <header className="text-center mb-6">
@@ -135,6 +144,12 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
         <div className="contact-info">
           <div className="contact-item"><Mail size={14} /> {email}</div>
           <div className="contact-item"><Phone size={14} /> {phone}</div>
+           {links?.map((link, index) => (
+            <div key={index} className="contact-item">
+              <LinkIcon size={14} />
+              <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            </div>
+          ))}
         </div>
       </header>
 

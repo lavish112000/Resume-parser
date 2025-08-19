@@ -20,24 +20,26 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
   const [editableData, setEditableData] = useState<ResumeData>(parsedData);
   const [isEditing, setIsEditing] = useState<string | null>(null);
 
-  const handleInputChange = (section: keyof ResumeData, value: any, index?: number, subIndex?: number) => {
+  const handleInputChange = (section: keyof ResumeData, value: any, index?: number, subIndex?: number, field?: string) => {
+    const newEditableData = JSON.parse(JSON.stringify(editableData));
+
     if (section === 'skills' && index !== undefined && subIndex !== undefined) {
-        const newSkills = JSON.parse(JSON.stringify(editableData.skills));
-        newSkills[index].skills[subIndex].name = value;
-        setEditableData({ ...editableData, skills: newSkills });
+        newEditableData.skills[index].skills[subIndex].name = value;
     } else if (section === 'skills' && index !== undefined) {
-        const newSkills = JSON.parse(JSON.stringify(editableData.skills));
-        newSkills[index].category = value;
-        setEditableData({ ...editableData, skills: newSkills });
+        newEditableData.skills[index].category = value;
+    } else if (section === 'links' && index !== undefined && field) {
+        if (!newEditableData.links) newEditableData.links = [];
+        newEditableData.links[index][field] = value;
     }
-    else if (index !== undefined && Array.isArray(editableData[section])) {
-      const sectionArray = [...(editableData[section] as any[])];
+    else if (index !== undefined && Array.isArray(newEditableData[section])) {
+      const sectionArray = [...(newEditableData[section] as any[])];
       sectionArray[index] = { ...sectionArray[index], ...value };
-      setEditableData({ ...editableData, [section]: sectionArray });
+      newEditableData[section] = sectionArray;
     }
      else {
-      setEditableData({ ...editableData, [section]: value });
+      newEditableData[section] = value;
     }
+    setEditableData(newEditableData);
   };
   
   const renderField = (label: string, value: string, onSave: () => void, children: React.ReactNode) => (
@@ -77,6 +79,19 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
               {renderField("Phone", editableData.phone, () => setIsEditing(null), 
                 <Input value={editableData.phone} onChange={(e) => handleInputChange('phone', e.target.value)} />
               )}
+            </div>
+             <div className="mt-4">
+              <h4 className="font-semibold text-muted-foreground mb-2">Links</h4>
+              {editableData.links?.map((link, index) => (
+                <div key={index} className="p-2 border rounded-lg mb-2 bg-muted/20">
+                  {renderField(`Link ${index + 1}: Label`, link.label, () => setIsEditing(null),
+                    <Input value={link.label} onChange={(e) => handleInputChange('links', e.target.value, index, undefined, 'label')} />
+                  )}
+                  {renderField(`Link ${index + 1}: URL`, link.url, () => setIsEditing(null),
+                    <Input value={link.url} onChange={(e) => handleInputChange('links', e.target.value, index, undefined, 'url')} />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
           

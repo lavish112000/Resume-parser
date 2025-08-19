@@ -8,7 +8,7 @@ type TemplateProps = {
 };
 
 export function AtsTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills, customSections } = data;
+  const { name, email, phone, links, summary, experience, education, skills, customSections } = data;
 
   const cssVariables = {
     '--primary-color': styleOptions.color,
@@ -44,6 +44,8 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         h1 { font-size: 2em; margin-bottom: 0.25rem; font-weight: bold; color: black; }
         .contact-info { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 0.9em; margin-bottom: 1.5rem; }
         .contact-item { display: flex; align-items: center; gap: 0.5rem; }
+        .contact-item a { color: inherit; text-decoration: none; }
+        .contact-item a:hover { text-decoration: underline; }
         h2 { font-size: 1.2em; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #333; padding-bottom: 0.25rem; margin-top: 1.25rem; margin-bottom: 0.75rem; font-weight: bold; color: black; }
         h3 { font-size: 1em; font-weight: bold; }
         .experience-item, .education-item { margin-bottom: 1rem; }
@@ -73,6 +75,11 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         <div className="contact-info">
           <div className="contact-item">{email}</div>
           <div className="contact-item">{phone}</div>
+           {links?.map((link, index) => (
+            <div key={index} className="contact-item">
+              <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            </div>
+          ))}
         </div>
       </header>
 
