@@ -60,6 +60,7 @@ type ResumeEditorProps = {
 };
 
 export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) {
+  const [activeTab, setActiveTab] = useState('form');
   const [template, setTemplate] = useState<Template>('ats');
   const [styleOptions, setStyleOptions] = useState<StyleOptions>({
     fontFamily: 'Inter',
@@ -102,14 +103,14 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
                     setStyleOptions={setStyleOptions}
                 />
             </div>
-            <Tabs defaultValue="form" className="flex-grow flex flex-col">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow flex flex-col">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="form">Form</TabsTrigger>
                     <TabsTrigger value="preview">Preview</TabsTrigger>
                 </TabsList>
                 <TabsContent value="form" className="flex-grow overflow-hidden">
                     <ScrollArea className="h-full rounded-lg border bg-card">
-                        <ResumeForm />
+                        <ResumeForm onShowPreview={() => setActiveTab('preview')} />
                     </ScrollArea>
                 </TabsContent>
                 <TabsContent value="preview" className="flex-grow overflow-hidden">

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useFormContext, useFieldArray } from 'react-hook-form';
@@ -7,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { PlusCircle, Trash2 } from 'lucide-react';
+import { PlusCircle, Trash2, Eye } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ImproveButton } from '@/components/improve-button';
 
@@ -89,7 +90,7 @@ function SkillInputs({ categoryIndex }: { categoryIndex: number }) {
 }
 
 
-export function ResumeForm() {
+export function ResumeForm({ onShowPreview }: { onShowPreview: () => void }) {
   const { control, getValues } = useFormContext<ResumeData>();
 
   const {
@@ -407,13 +408,20 @@ export function ResumeForm() {
         ))}
 
       </Accordion>
-      <div className="mt-6">
+      <div className="mt-6 flex justify-between items-center">
         <Button
           type="button"
           variant="outline"
           onClick={() => appendCustomSection({ title: 'New Section', description: '' })}
         >
           <PlusCircle className="mr-2 h-4 w-4" /> Add Section
+        </Button>
+        <Button
+          type="button"
+          onClick={onShowPreview}
+          size="lg"
+        >
+          <Eye className="mr-2 h-4 w-4" /> Show Preview
         </Button>
       </div>
     </form>
