@@ -32,7 +32,7 @@ const resumeSchema = z.object({
   summary: z.string().min(1, 'Summary is required'),
   experience: z.array(experienceSchema),
   education: z.array(educationSchema),
-  skills: z.array(z.string().min(1, "Skill cannot be empty")).min(1, "At least one skill is required"),
+  skills: z.array(z.object({name: z.string().min(1, "Skill cannot be empty")})).min(1, "At least one skill is required"),
 });
 
 
@@ -89,13 +89,15 @@ export function ResumeEditor({ initialResumeData, onReset }: ResumeEditorProps) 
           </div>
 
           <div className="hidden lg:block overflow-hidden pb-8">
-             <ScrollArea className="h-full bg-white rounded-lg shadow-lg">
-                <div id="resume-preview">
-                    <ResumePreview
-                    data={resumeData}
-                    template={template}
-                    styleOptions={styleOptions}
-                    />
+             <ScrollArea className="h-full rounded-lg">
+                <div id="resume-preview" className="p-8 bg-muted/50 flex justify-center">
+                    <div className="transform scale-[0.8] origin-top shadow-2xl">
+                        <ResumePreview
+                        data={resumeData}
+                        template={template}
+                        styleOptions={styleOptions}
+                        />
+                    </div>
                 </div>
             </ScrollArea>
           </div>

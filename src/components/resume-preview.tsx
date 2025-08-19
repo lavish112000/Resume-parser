@@ -25,7 +25,7 @@ export function ResumePreview({ data, template, styleOptions }: ResumePreviewPro
   };
 
   return (
-    <div className="p-4 bg-white">
+    <div className="bg-white">
       {renderTemplate()}
     </div>
   );

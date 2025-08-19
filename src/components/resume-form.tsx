@@ -264,18 +264,20 @@ export function ResumeForm() {
                 <h3 className="text-xl font-semibold">Skills</h3>
             </AccordionTrigger>
             <AccordionContent className="pl-2 space-y-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                <div className="flex flex-wrap gap-2">
                     {skillFields.map((field, index) => (
-                    <div key={field.id} className="flex items-center gap-2">
+                    <div key={field.id} className="flex items-center gap-2 bg-muted/40 p-2 rounded-md">
                         <Input
                         {...register(`skills.${index}.name`)}
-                        placeholder={`Skill ${index + 1}`}
+                        placeholder={`Skill`}
+                        className="h-8"
                         />
                         <Button
                         type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => removeSkill(index)}
+                        className="h-8 w-8"
                         >
                         <Trash2 className="h-4 w-4" />
                         </Button>
@@ -286,6 +288,7 @@ export function ResumeForm() {
                     type="button"
                     variant="outline"
                     onClick={() => appendSkill({ name: '' })}
+                    className="mt-2"
                 >
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Skill
                 </Button>
