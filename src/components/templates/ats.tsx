@@ -16,6 +16,16 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
     '--font-size': '11pt',
     '--margin': styleOptions.margin,
   } as CSSProperties;
+  
+  const formatDescription = (description: string) => {
+    if (!description) return '';
+    const listItems = description
+      .split('\n')
+      .filter(line => line.trim() !== '')
+      .map(line => `<li>${line.replace(/^- ?/, '').trim()}</li>`)
+      .join('');
+    return `<ul>${listItems}</ul>`;
+  };
 
   return (
     <div className="a4-page bg-white text-black" style={cssVariables}>
@@ -68,7 +78,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
               <h3>{job.title}, <span className="company-name">{job.company}</span></h3>
               <span className="text-sm">{job.dates}</span>
             </div>
-            <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+            <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(job.description) }} />
           </div>
         ))}
       </section>
@@ -105,7 +115,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
        {customSections?.map((section, index) => (
         <section key={index}>
           <h2>{section.title}</h2>
-          <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+          <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(section.description) }} />
         </section>
       ))}
 

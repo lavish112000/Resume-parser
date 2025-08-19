@@ -18,6 +18,16 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
     '--font-size': styleOptions.fontSize,
     '--margin': styleOptions.margin,
   } as CSSProperties;
+  
+  const formatDescription = (description: string) => {
+    if (!description) return '';
+    const listItems = description
+      .split('\n')
+      .filter(line => line.trim() !== '')
+      .map(line => `<li>${line.replace(/^- ?/, '').trim()}</li>`)
+      .join('');
+    return `<ul>${listItems}</ul>`;
+  };
 
   const mainContent = (
     <>
@@ -28,7 +38,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
             <h3>{job.title} | <span className="company-name">{job.company}</span></h3>
             <span className="text-sm text-gray-600">{job.dates}</span>
           </div>
-          <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+          <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(job.description) }} />
         </div>
       ))}
       {customSections?.map((section, index) => {
@@ -36,7 +46,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
           return (
             <div key={index}>
               <h2>{section.title}</h2>
-              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(section.description) }} />
             </div>
           )
         }
@@ -75,7 +85,7 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
           return (
             <div key={index}>
               <h2>{section.title}</h2>
-              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${section.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(section.description) }} />
             </div>
           )
         }
