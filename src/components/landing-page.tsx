@@ -154,11 +154,19 @@ export function LandingPage({
       
       <section className="py-20 px-4">
         <div className="container mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-2">Need some inspiration?</h2>
-            <p className="text-muted-foreground mb-8">Check out our resume examples to get started.</p>
-            <Link href="/examples">
-                <Button size="lg">Browse Examples</Button>
-            </Link>
+            <h2 className="text-3xl font-bold mb-8">Ready to Get Started?</h2>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+                <Link href="/templates" className="w-full sm:w-auto">
+                    <Button size="lg" variant="outline" className="w-full hover:scale-105 transition-transform">
+                        Browse Templates
+                    </Button>
+                </Link>
+                <Link href="/examples" className="w-full sm:w-auto">
+                    <Button size="lg" className="w-full hover:scale-105 transition-transform">
+                        View Examples
+                    </Button>
+                </Link>
+            </div>
         </div>
       </section>
 

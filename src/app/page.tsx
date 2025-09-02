@@ -71,10 +71,20 @@ export default function Home() {
       try {
         const resumeDataUri = e.target?.result as string;
         if (!resumeDataUri) throw new Error('Could not read file.');
+        console.log('Resume Data URI:', resumeDataUri.slice(0, 100)); // Log first 100 chars
         const data = await parseResume({ resumeDataUri });
+        console.log('Parsed Resume Data:', data);
+        // Fallback: If critical fields are missing, show a warning
+        if (!data || !data.name || !data.email || !data.experience || data.experience.length === 0) {
+          toast({
+            variant: 'default',
+            title: 'Partial Extraction',
+            description: 'Some data could not be extracted. Please verify and complete missing fields.'
+          });
+        }
         setParsedData(data);
       } catch (error) {
-        console.error(error);
+        console.error('Resume parsing error:', error);
         toast({
           variant: 'destructive',
           title: 'Parsing Failed',
@@ -106,8 +116,53 @@ export default function Home() {
     }
   }
 
-  const handleDownload = () => {
-    window.print();
+  // PDF export using html2pdf.js
+  const handleDownloadPDF = () => {
+    import('html2pdf.js').then(html2pdf => {
+      const element = document.createElement('div');
+      document.body.appendChild(element);
+      element.style.display = 'none';
+      element.innerHTML = document.getElementById('printable-resume')?.innerHTML || '';
+      html2pdf.default().from(element).set({
+        margin: 0.5,
+        filename: 'resume.pdf',
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      }).save().then(() => {
+        document.body.removeChild(element);
+      });
+    });
+  };
+
+  // Docx export using docx
+  const handleDownloadDocx = async () => {
+    const { Document, Packer, Paragraph, TextRun } = await import('docx');
+    // Simple docx export (expand for full resume)
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({ text: resumeData?.name || '', bold: true, size: 32 }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun(resumeData?.summary || ''),
+            ],
+          }),
+          // ...add more fields as needed
+        ],
+      }],
+    });
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'resume.docx';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   if (resumeData) {
@@ -116,12 +171,13 @@ export default function Home() {
         <ResumeEditor 
           initialResumeData={resumeData} 
           onReset={resetApp} 
-          onDownload={handleDownload}
+          onDownload={handleDownloadPDF}
           template={template}
           setTemplate={setTemplate}
           styleOptions={styleOptions}
           setStyleOptions={setStyleOptions}
           setLiveResumeData={setResumeData}
+          onDownloadDocx={handleDownloadDocx}
         />
         <div id="printable-resume" className="hidden">
           <ResumePreview

@@ -10,9 +10,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Poppins', 'Inter', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
-        code: ['monospace'],
+        headline: ['Poppins', 'Inter', 'sans-serif'],
+        code: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       typography: ({ theme }: { theme: (path: string) => any }) => ({
         DEFAULT: {

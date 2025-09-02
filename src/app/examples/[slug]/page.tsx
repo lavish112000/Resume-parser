@@ -21,14 +21,18 @@ export default function ExampleDetailPage({ params }: { params: { slug: string }
                 fontFamily: 'Arial, sans-serif',
                 fontSize: '11pt',
                 color: '#000000',
-                margin: '1.5cm'
+                margin: '1.5cm',
+                lineHeight: '1.6',
+                skillSpacing: '0.5rem'
             }} />
         default:
              return <ModernTemplate data={example.data} styleOptions={{
                 fontFamily: 'Inter',
                 fontSize: '11pt',
                 color: '#5DADE2',
-                margin: '1.5cm'
+                margin: '2cm',
+                lineHeight: '1.6',
+                skillSpacing: '0.5rem'
             }} />
       }
   }

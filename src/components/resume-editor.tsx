@@ -12,6 +12,8 @@ import { TemplateOptions } from '@/components/template-options';
 import type { ResumeData, Template, StyleOptions } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ATSTipsSidebar } from '@/components/ats-tips-sidebar';
+import { ResumeAnalytics } from '@/components/resume-analytics';
 
 const experienceSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -52,11 +54,11 @@ const resumeSchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().min(1, 'Phone number is required'),
   summary: z.string().min(1, 'Summary is required'),
-  experience: z.array(experienceSchema),
-  education: z.array(educationSchema),
-  skills: z.array(skillCategorySchema).min(1, "At least one skill category is required"),
-  customSections: z.array(customSectionSchema).optional(),
-  links: z.array(linkSchema).optional(),
+  experience: z.array(experienceSchema).default([]),
+  education: z.array(educationSchema).optional().default([]),
+  skills: z.array(skillCategorySchema).min(1, "At least one skill category is required").default([]),
+  customSections: z.array(customSectionSchema).optional().default([]),
+  links: z.array(linkSchema).optional().default([]),
 });
 
 
@@ -64,6 +66,7 @@ type ResumeEditorProps = {
   initialResumeData: ResumeData;
   onReset: () => void;
   onDownload: () => void;
+  onDownloadDocx?: () => void;
   template: Template;
   setTemplate: (template: Template) => void;
   styleOptions: StyleOptions;
@@ -75,6 +78,7 @@ export function ResumeEditor({
   initialResumeData, 
   onReset,
   onDownload,
+  onDownloadDocx,
   template,
   setTemplate,
   styleOptions,
@@ -83,7 +87,7 @@ export function ResumeEditor({
 }: ResumeEditorProps) {
   const [activeTab, setActiveTab] = useState('form');
   
-  const methods = useForm<ResumeData>({
+  const methods = useForm<any>({
     resolver: zodResolver(resumeSchema),
     defaultValues: initialResumeData,
     mode: 'onChange'
@@ -111,40 +115,56 @@ export function ResumeEditor({
   return (
     <FormProvider {...methods}>
       <div className="flex flex-col h-screen bg-muted/40">
-        <AppHeader isEditing onDownload={onDownload} onReset={onReset}/>
+  <AppHeader isEditing onDownload={onDownload} onDownloadDocx={onDownloadDocx} onReset={onReset}/>
         <main className="flex-grow flex flex-col pt-20 px-4 sm:px-8">
-            <div className="pb-4">
-                <TemplateOptions
-                    template={template}
-                    setTemplate={handleTemplateChange}
-                    styleOptions={styleOptions}
-                    setStyleOptions={setStyleOptions}
-                />
+          <div className="pb-4">
+            <TemplateOptions
+              template={template}
+              setTemplate={handleTemplateChange}
+              styleOptions={styleOptions}
+              setStyleOptions={setStyleOptions}
+            />
+          </div>
+          <div className="flex flex-col md:flex-row gap-8 min-h-0">
+            {/* ATS Tips Sidebar */}
+            <div className="md:w-80 w-full shrink-0">
+              <ATSTipsSidebar resumeData={resumeData} />
             </div>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow flex flex-col min-h-0">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="form">Form</TabsTrigger>
-                    <TabsTrigger value="preview">Preview</TabsTrigger>
+            <div className="flex-grow flex flex-col min-h-0">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow flex flex-col min-h-0">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="form">Form</TabsTrigger>
+                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                  <TabsTrigger value="analytics">Analytics</TabsTrigger>
                 </TabsList>
                 <TabsContent value="form" className="flex-grow overflow-hidden">
-                    <ScrollArea className="h-full rounded-lg border bg-card">
-                        <ResumeForm onShowPreview={() => setActiveTab('preview')} />
-                    </ScrollArea>
+                  <ScrollArea className="h-full rounded-lg border bg-card">
+                    <ResumeForm onShowPreview={() => setActiveTab('preview')} />
+                  </ScrollArea>
                 </TabsContent>
                 <TabsContent value="preview" className="flex-grow overflow-hidden">
-                     <ScrollArea className="h-full rounded-lg">
-                        <div className="p-8 bg-muted/50 flex justify-center">
-                            <div className="a4-page-container">
-                                <ResumePreview
-                                data={resumeData}
-                                template={template}
-                                styleOptions={styleOptions}
-                                />
-                            </div>
-                        </div>
-                    </ScrollArea>
+                  <ScrollArea className="h-full rounded-lg">
+                    <div className="p-8 bg-muted/50 flex justify-center">
+                      <div className="a4-page-container">
+                        <ResumePreview
+                          data={resumeData}
+                          template={template}
+                          styleOptions={styleOptions}
+                        />
+                      </div>
+                    </div>
+                  </ScrollArea>
                 </TabsContent>
-            </Tabs>
+                <TabsContent value="analytics" className="flex-grow overflow-hidden">
+                  <ScrollArea className="h-full rounded-lg">
+                    <div className="p-6">
+                      <ResumeAnalytics resumeData={resumeData} />
+                    </div>
+                  </ScrollArea>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
         </main>
       </div>
     </FormProvider>
