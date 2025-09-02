@@ -53,6 +53,9 @@ export function UserDashboard() {
     }
   ]);
 
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [showTemplateToast, setShowTemplateToast] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -224,7 +227,7 @@ export function UserDashboard() {
           <TabsContent value="templates">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {['Modern Professional', 'Classic Traditional', 'ATS Optimized', 'Creative Design', 'Minimalist', 'Executive'].map((template, idx) => (
-                <Card key={template} className="hover:shadow-lg transition-shadow cursor-pointer">
+                <Card key={template} className={`hover:shadow-lg transition-shadow cursor-pointer ${selectedTemplate === template ? 'border-2 border-blue-500' : ''}`}>
                   <CardHeader>
                     <div className="aspect-[3/4] bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg mb-3 flex items-center justify-center">
                       <FileText className="h-16 w-16 text-slate-400" />
@@ -239,7 +242,13 @@ export function UserDashboard() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full">Use Template</Button>
+                    <Button className="w-full" onClick={() => {
+                      setSelectedTemplate(template);
+                      setShowTemplateToast(true);
+                      setTimeout(() => setShowTemplateToast(false), 2000);
+                    }}>
+                      {selectedTemplate === template ? 'Selected!' : 'Use Template'}
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
