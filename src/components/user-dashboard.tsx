@@ -55,6 +55,9 @@ export function UserDashboard() {
 
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [showTemplateToast, setShowTemplateToast] = useState(false);
+  const [showEditToast, setShowEditToast] = useState(false);
+  const [showDownloadToast, setShowDownloadToast] = useState(false);
+  const [showViewAllToast, setShowViewAllToast] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
@@ -80,6 +83,16 @@ export function UserDashboard() {
         </div>
 
         <Tabs defaultValue="resumes" className="space-y-6">
+          {/* Toasts for button actions */}
+          {showEditToast && (
+            <div className="fixed top-6 right-6 bg-blue-600 text-white px-4 py-2 rounded shadow-lg z-50 animate-fade-in-up">Edit resume feature coming soon!</div>
+          )}
+          {showDownloadToast && (
+            <div className="fixed top-6 right-6 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50 animate-fade-in-up">Download started!</div>
+          )}
+          {showViewAllToast && (
+            <div className="fixed top-6 right-6 bg-purple-600 text-white px-4 py-2 rounded shadow-lg z-50 animate-fade-in-up">Showing all resumes!</div>
+          )}
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="resumes">My Resumes</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -120,7 +133,10 @@ export function UserDashboard() {
               <div className="lg:col-span-3 space-y-4">
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-semibold">Saved Resumes</h2>
-                  <Button variant="outline">
+                  <Button variant="outline" onClick={() => {
+                    setShowViewAllToast(true);
+                    setTimeout(() => setShowViewAllToast(false), 2000);
+                  }}>
                     <Eye className="mr-2 h-4 w-4" />
                     View All
                   </Button>
@@ -148,10 +164,16 @@ export function UserDashboard() {
                         
                         <div className="flex justify-between items-center pt-2">
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
+                            <Button size="sm" variant="outline" onClick={() => {
+                              setShowEditToast(true);
+                              setTimeout(() => setShowEditToast(false), 2000);
+                            }}>
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="outline">
+                            <Button size="sm" variant="outline" onClick={() => {
+                              setShowDownloadToast(true);
+                              setTimeout(() => setShowDownloadToast(false), 2000);
+                            }}>
                               <Download className="h-4 w-4" />
                             </Button>
                           </div>
