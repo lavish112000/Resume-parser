@@ -1,5 +1,10 @@
 
+
 'use client';
+
+// ResumeEditor is the main editor for creating and updating resume data.
+// Uses React Hook Form and Zod for validation and state management.
+// Includes tabs for editing, previewing, analytics, and ATS tips.
 import { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ATSTipsSidebar } from '@/components/ats-tips-sidebar';
 import { ResumeAnalytics } from '@/components/resume-analytics';
 
+// Zod schemas for validating resume sections.
 const experienceSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   company: z.string().min(1, 'Company is required'),

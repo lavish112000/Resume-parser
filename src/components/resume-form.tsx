@@ -1,6 +1,10 @@
 
+
 'use client';
 
+// ResumeForm is the main form for editing resume data.
+// Uses React Hook Form for state management and validation.
+// Includes subforms for skills, experience, education, custom sections, and links.
 import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import type { ResumeData } from '@/lib/types';
@@ -13,31 +17,35 @@ import { PlusCircle, Trash2, Eye, User, FileText, Building, GraduationCap, Troph
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ImproveButton } from '@/components/improve-button';
 
+/**
+ * Subform for managing skill categories and skills.
+ * Uses useFieldArray for dynamic skill category fields.
+ */
 function SkillsForm() {
-    const { control } = useFormContext<ResumeData>();
-    const { fields: skillCategoryFields, append: appendSkillCategory, remove: removeSkillCategory } = useFieldArray({
-        control,
-        name: "skills",
-    });
+  const { control } = useFormContext<ResumeData>();
+  const { fields: skillCategoryFields, append: appendSkillCategory, remove: removeSkillCategory } = useFieldArray({
+    control,
+    name: "skills",
+  });
 
-    return (
-        <div className="space-y-6">
-            {skillCategoryFields.map((categoryField, categoryIndex) => (
-                <Card key={categoryField.id} className="card-vibrant border-2 border-green-100 hover-lift transition-smooth">
-                    <CardHeader className="flex flex-row items-center justify-between py-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
-                        <FormField
-                            control={control}
-                            name={`skills.${categoryIndex}.category`}
-                            render={({ field }) => (
-                                <FormItem className="flex-grow">
-                                    <FormControl>
-                                        <Input 
-                                            {...field} 
-                                            placeholder="Skill Category (e.g., Programming Languages, Design Tools)" 
-                                            className="text-lg font-semibold border-none focus:ring-0 p-0 bg-transparent placeholder:text-green-400" 
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
+  return (
+    <div className="space-y-6">
+      {skillCategoryFields.map((categoryField, categoryIndex) => (
+        <Card key={categoryField.id} className="card-vibrant border-2 border-green-100 hover-lift transition-smooth">
+          <CardHeader className="flex flex-row items-center justify-between py-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
+            <FormField
+              control={control}
+              name={`skills.${categoryIndex}.category`}
+              render={({ field }) => (
+                <FormItem className="flex-grow">
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      placeholder="Skill Category (e.g., Programming Languages, Design Tools)" 
+                      className="text-lg font-semibold border-none focus:ring-0 p-0 bg-transparent placeholder:text-green-400" 
+                    />
+                  </FormControl>
+                  <FormMessage />
                                 </FormItem>
                             )}
                         />

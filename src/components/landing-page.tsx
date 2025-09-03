@@ -1,5 +1,8 @@
+
 'use client';
 
+// LandingPage is the main entry UI for uploading or creating a resume.
+// Provides drag-and-drop, file input, and template selection options for users.
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +10,7 @@ import { Loader2, UploadCloud, FileText, Bot, FileCheck, Palette } from 'lucide-
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Props for LandingPage component, including handlers and state for file upload and creation.
 interface LandingPageProps {
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
@@ -18,6 +22,10 @@ interface LandingPageProps {
   fileInputRef: React.RefObject<HTMLInputElement>;
 }
 
+/**
+ * Main landing page for resume upload and creation.
+ * Handles drag-and-drop, file input, and template selection.
+ */
 export function LandingPage({
   onFileChange,
   onDragOver,
@@ -28,6 +36,7 @@ export function LandingPage({
   fileName,
   fileInputRef,
 }: LandingPageProps) {
+  // Render the landing page UI for resume upload and creation.
   return (
     <div className="w-full pt-20 animate-fade-in-up">
       <section className="container mx-auto text-center py-20 px-4">
