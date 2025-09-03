@@ -2,6 +2,10 @@ import * as React from 'react';
 
 import {cn} from '@/lib/utils';
 
+// Textarea primitive
+// ------------------
+// Simple textarea with design-system classes. Use this for multi-line fields
+// such as experience descriptions, summaries, and custom sections.
 const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<'textarea'>>(
   ({className, ...props}, ref) => {
     return (
