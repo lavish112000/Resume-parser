@@ -1,3 +1,12 @@
+/**
+ * Card UI Primitive
+ * -----------------
+ * Lightweight card component that composes a header, title, content and
+ * description areas. This component is intentionally minimal and relies on
+ * utility classes for visual style so it can be used for forms, lists, and
+ * other surface containers.
+ */
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
