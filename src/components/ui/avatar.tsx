@@ -1,5 +1,13 @@
 "use client"
 
+/**
+ * Avatar primitive
+ * ----------------
+ * Simple avatar component composed from Radix primitives. Exposes
+ * Avatar, AvatarImage, and AvatarFallback for consistent avatar usage
+ * across the app (dashboard, comments, saved resumes).
+ */
+
 import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
