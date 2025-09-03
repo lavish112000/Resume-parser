@@ -1,6 +1,9 @@
 
+
 'use client';
 
+// VerificationStep allows users to review and edit parsed resume data before finalizing.
+// Provides UI for editing, confirming, or canceling the parsed resume.
 import { useState } from 'react';
 import type { ResumeData } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -9,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Check, Edit, X } from 'lucide-react';
 
+// Props for VerificationStep component.
 interface VerificationStepProps {
   parsedData: ResumeData;
   onComplete: (data: ResumeData) => void;
@@ -16,10 +20,15 @@ interface VerificationStepProps {
   fileName: string | null;
 }
 
+/**
+ * Component for reviewing and editing parsed resume data before confirmation.
+ * Allows editing of all resume fields and sections.
+ */
 export function VerificationStep({ parsedData, onComplete, onCancel, fileName }: VerificationStepProps) {
   const [editableData, setEditableData] = useState<ResumeData>(parsedData);
   const [isEditing, setIsEditing] = useState<string | null>(null);
 
+  // Handles input changes for all resume sections and fields.
   const handleInputChange = (section: keyof ResumeData, value: any, index?: number, subIndex?: number, field?: string) => {
     const newEditableData = JSON.parse(JSON.stringify(editableData));
 
