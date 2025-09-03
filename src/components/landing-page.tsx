@@ -1,8 +1,24 @@
 
 'use client';
 
-// LandingPage is the main entry UI for uploading or creating a resume.
-// Provides drag-and-drop, file input, and template selection options for users.
+/**
+ * LandingPage
+ * -----------
+ * Entry surface for ResumeForge. Provides the primary actions a user can take:
+ * - Upload an existing resume (drag-and-drop or file input)
+ * - Create a new resume from scratch
+ * - Explore templates and examples
+ *
+ * Responsibilities:
+ * - Surface upload handlers and wire them to the parent page state.
+ * - Provide visual affordances (loading states, file previews, call-to-action buttons).
+ * - Delegate actual parsing / AI flows to higher-level handlers via provided callbacks.
+ *
+ * Integration notes:
+ * - The component is intentionally UI-only and expects the caller to handle the
+ *   file parsing and navigation. This keeps the landing page lightweight and
+ *   focused on UX.
+ */
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -46,6 +62,8 @@ export function LandingPage({
         </p>
         <Card className="w-full max-w-2xl mx-auto shadow-xl animate-scale-in [animation-delay:0.4s]">
           <CardHeader>
+            {/* Card header: title + brief description. Keep presentation-only; actions are passed through.
+                The `Card` primitive is intentionally dumb and receives content from this page. */}
             <CardTitle className="text-2xl">Get Started</CardTitle>
             <CardDescription>
               Upload your resume to have our AI parse it, or start fresh.

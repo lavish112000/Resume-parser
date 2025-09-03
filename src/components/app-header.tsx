@@ -1,8 +1,24 @@
 
-'use client';
+"use client";
 
-// AppHeader is the top navigation bar for the application.
-// Provides branding, navigation, and action buttons for resume editing and download.
+/**
+ * AppHeader
+ * ---------
+ * Global application header with branding and primary actions.
+ *
+ * Responsibilities:
+ * - Render brand/logo and primary navigation.
+ * - Expose contextual actions (Reset, Download PDF/DOCX) when editing.
+ *
+ * Props contract:
+ * - isEditing: whether the app is currently editing a resume (controls which actions are visible)
+ * - onDownload / onDownloadDocx: callbacks for generating PDF / DOCX download
+ * - onReset: callback to reset the current editing session
+ *
+ * Implementation notes:
+ * - Keep this component purely presentational; heavy actions should be handled by parent/page to
+ *   keep header fast and cacheable.
+ */
 import { Hammer, Download, RefreshCcw, BookOpen, FileText, Palette, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
