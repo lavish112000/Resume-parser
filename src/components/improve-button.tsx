@@ -1,5 +1,8 @@
+
 'use client';
 
+// ImproveButton provides an AI-powered button for improving resume field content.
+// Opens a dialog, calls the AI service, and updates the field with improved text.
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,12 +12,18 @@ import { improveResumeContent } from '@/ai/flows/improve-resume-content';
 import { Wand2, Loader2 } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
+// Supported field names for improvement.
 type FieldName = 'name' | 'email' | 'phone' | 'summary' | `experience.${number}.title` | `experience.${number}.company` | `experience.${number}.description` | `customSections.${number}.description`;
 
+// Props for ImproveButton component.
 type ImproveButtonProps = {
   fieldName: FieldName;
 };
 
+/**
+ * Button for AI-powered improvement of resume field content.
+ * Opens dialog, calls AI, and updates field value.
+ */
 export function ImproveButton({ fieldName }: ImproveButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +32,7 @@ export function ImproveButton({ fieldName }: ImproveButtonProps) {
   
   const { setValue, getValues } = useFormContext();
 
+  // Calls AI service to improve the field content.
   const handleImprove = async () => {
     setIsLoading(true);
     try {

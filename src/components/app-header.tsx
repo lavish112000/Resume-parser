@@ -1,9 +1,13 @@
+
 'use client';
 
+// AppHeader is the top navigation bar for the application.
+// Provides branding, navigation, and action buttons for resume editing and download.
 import { Hammer, Download, RefreshCcw, BookOpen, FileText, Palette, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
+// Props for AppHeader component, including editing state and action handlers.
 type AppHeaderProps = {
   isEditing?: boolean;
   onDownload?: () => void;
@@ -11,7 +15,12 @@ type AppHeaderProps = {
   onReset?: () => void;
 };
 
+/**
+ * Main header component for branding and navigation.
+ * Shows action buttons for resume editing, download, and reset when editing.
+ */
 export function AppHeader({ isEditing = false, onDownload, onDownloadDocx, onReset }: AppHeaderProps) {
+  // Render the header UI with branding and action buttons.
   return (
     <header className="w-full p-4 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 fixed top-0 left-0 z-50 shadow-lg">
       <div className="max-w-screen-2xl mx-auto flex justify-between items-center">
