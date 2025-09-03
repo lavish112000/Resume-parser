@@ -1,6 +1,8 @@
+
 "use client"
 
-// Inspired by react-hot-toast library
+// Custom toast notification hook inspired by react-hot-toast.
+// Provides global toast state management and actions for showing, updating, and removing toasts.
 import * as React from "react"
 
 import type {
@@ -8,9 +10,11 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
+// Limit for concurrent toasts and removal delay.
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
 
+// Toast object type with additional metadata.
 type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode
@@ -18,6 +22,7 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
+// Action types for toast reducer.
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",
@@ -25,15 +30,19 @@ const actionTypes = {
   REMOVE_TOAST: "REMOVE_TOAST",
 } as const
 
+// Internal counter for toast IDs.
 let count = 0
 
+// Generates a unique toast ID.
 function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER
   return count.toString()
 }
 
+// Action type for reducer.
 type ActionType = typeof actionTypes
 
+// Action union for reducer.
 type Action =
   | {
       type: ActionType["ADD_TOAST"]
