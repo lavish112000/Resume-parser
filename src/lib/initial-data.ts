@@ -1,5 +1,7 @@
 import type { ResumeData } from './types';
 
+// Initial resume data used as a starting point for new users.
+// Provides a sample resume structure for the ResumeEditor and preview components.
 export const initialData: ResumeData = {
   name: 'John Doe',
   email: 'john.doe@email.com',
