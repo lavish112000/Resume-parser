@@ -1,4 +1,12 @@
-'use client';
+"use client";
+
+/**
+ * LoadingStates
+ * -------------
+ * Provides a set of skeleton/loading UI variants used across the app while
+ * data is loading (dashboard tiles, form placeholders, resume preview skeleton).
+ * These are purely presentational and help prevent layout shift during async loads.
+ */
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
