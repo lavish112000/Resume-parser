@@ -1,5 +1,13 @@
 "use client"
 
+/**
+ * Progress primitive
+ * ------------------
+ * A thin wrapper around Radix Progress used to show simple progress bars
+ * throughout the app (analytics, profile completeness, etc.). Keep styling
+ * in this file small so consumers can control layout around it.
+ */
+
 import * as React from "react"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 
