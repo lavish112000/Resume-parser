@@ -1,3 +1,6 @@
+
+// Home is the main landing page for the resume builder application.
+// It manages resume upload, parsing, editing, template selection, and preview.
 'use client';
 
 import { useState, useRef } from 'react';
@@ -12,7 +15,12 @@ import { VerificationStep } from '@/components/verification-step';
 import { ResumePreview } from '@/components/resume-preview';
 import type { StyleOptions, Template } from '@/lib/types';
 
+/**
+ * Main page component for resume upload, parsing, and editing.
+ * Handles file input, drag-and-drop, template selection, and style customization.
+ */
 export default function Home() {
+  // State for resume data, parsed data, loading status, file name, template, and style options.
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [parsedData, setParsedData] = useState<ResumeData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +37,10 @@ export default function Home() {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  /**
+   * Handles file input change event for resume upload.
+   * @param event - File input change event
+   */
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -36,6 +48,10 @@ export default function Home() {
     }
   };
 
+  /**
+   * Handles drag over event for drag-and-drop file upload.
+   * @param event - Drag event
+   */
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
