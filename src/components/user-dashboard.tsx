@@ -1,5 +1,8 @@
+
 'use client';
 
+// UserDashboard is the main dashboard for managing resumes, templates, analytics, and help.
+// Provides tabs for different dashboard sections and interactive cards for resume management.
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,6 +27,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+// Type for saved resume objects in dashboard state.
 interface SavedResume {
   id: string;
   name: string;
@@ -33,7 +37,12 @@ interface SavedResume {
   atsScore: number;
 }
 
+/**
+ * Main dashboard component for resume management and analytics.
+ * Renders tabs for resumes, analytics, templates, and help.
+ */
 export function UserDashboard() {
+  // State for saved resumes (demo data).
   const [savedResumes] = useState<SavedResume[]>([
     {
       id: '1',
