@@ -1,4 +1,6 @@
 
+// Example resume data for demo and inspiration purposes.
+// Each example includes a title, description, slug, template type, and structured resume data.
 import type { ResumeData, Template } from './types';
 
 export const resumeExamples: { title: string; description: string; slug: string; data: ResumeData, template: Template }[] = [
