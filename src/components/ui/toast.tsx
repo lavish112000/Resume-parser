@@ -1,5 +1,14 @@
 "use client"
 
+/**
+ * Toast primitives
+ * ----------------
+ * Thin, styled wrappers around Radix Toast primitives used by the application
+ * Toaster. These expose typed components (Toast, ToastTitle, ToastDescription,
+ * ToastAction) and a fixed viewport. Keep these components presentational so
+ * the toast state management can be implemented separately in hooks/use-toast.
+ */
+
 import * as React from "react"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"

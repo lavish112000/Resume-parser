@@ -1,5 +1,24 @@
+
 'use client';
 
+/**
+ * LandingPage
+ * -----------
+ * Entry surface for ResumeForge. Provides the primary actions a user can take:
+ * - Upload an existing resume (drag-and-drop or file input)
+ * - Create a new resume from scratch
+ * - Explore templates and examples
+ *
+ * Responsibilities:
+ * - Surface upload handlers and wire them to the parent page state.
+ * - Provide visual affordances (loading states, file previews, call-to-action buttons).
+ * - Delegate actual parsing / AI flows to higher-level handlers via provided callbacks.
+ *
+ * Integration notes:
+ * - The component is intentionally UI-only and expects the caller to handle the
+ *   file parsing and navigation. This keeps the landing page lightweight and
+ *   focused on UX.
+ */
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +26,7 @@ import { Loader2, UploadCloud, FileText, Bot, FileCheck, Palette } from 'lucide-
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Props for LandingPage component, including handlers and state for file upload and creation.
 interface LandingPageProps {
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
@@ -18,6 +38,10 @@ interface LandingPageProps {
   fileInputRef: React.RefObject<HTMLInputElement>;
 }
 
+/**
+ * Main landing page for resume upload and creation.
+ * Handles drag-and-drop, file input, and template selection.
+ */
 export function LandingPage({
   onFileChange,
   onDragOver,
@@ -28,6 +52,7 @@ export function LandingPage({
   fileName,
   fileInputRef,
 }: LandingPageProps) {
+  // Render the landing page UI for resume upload and creation.
   return (
     <div className="w-full pt-20 animate-fade-in-up">
       <section className="container mx-auto text-center py-20 px-4">
@@ -37,6 +62,8 @@ export function LandingPage({
         </p>
         <Card className="w-full max-w-2xl mx-auto shadow-xl animate-scale-in [animation-delay:0.4s]">
           <CardHeader>
+            {/* Card header: title + brief description. Keep presentation-only; actions are passed through.
+                The `Card` primitive is intentionally dumb and receives content from this page. */}
             <CardTitle className="text-2xl">Get Started</CardTitle>
             <CardDescription>
               Upload your resume to have our AI parse it, or start fresh.
@@ -154,11 +181,19 @@ export function LandingPage({
       
       <section className="py-20 px-4">
         <div className="container mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-2">Need some inspiration?</h2>
-            <p className="text-muted-foreground mb-8">Check out our resume examples to get started.</p>
-            <Link href="/examples">
-                <Button size="lg">Browse Examples</Button>
-            </Link>
+            <h2 className="text-3xl font-bold mb-8">Ready to Get Started?</h2>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+                <Link href="/templates" className="w-full sm:w-auto">
+                    <Button size="lg" variant="outline" className="w-full hover:scale-105 transition-transform">
+                        Browse Templates
+                    </Button>
+                </Link>
+                <Link href="/examples" className="w-full sm:w-auto">
+                    <Button size="lg" className="w-full hover:scale-105 transition-transform">
+                        View Examples
+                    </Button>
+                </Link>
+            </div>
         </div>
       </section>
 

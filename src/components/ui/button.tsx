@@ -4,6 +4,17 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Button UI Primitive
+ * -------------------
+ * A design-system button built on top of Tailwind + CVA (class-variance-authority).
+ * Provides consistent variants and sizes for the app. It supports `asChild` so
+ * consumers can render it as a different element (like `a` or `Link`).
+ *
+ * Important:
+ * - Avoid placing heavy logic inside this component. Keep it presentational so
+ *   it remains reusable across dialogs, forms, and pages.
+ */
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {

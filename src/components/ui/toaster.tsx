@@ -10,6 +10,11 @@ import {
   ToastViewport,
 } from "@/components/ui/toast"
 
+// Toaster
+// -------
+// Renders the active toasts from the global toast hook into the UI using
+// the presentational Radix-based Toast primitives. Separates visual concerns
+// (this file) from toast state management (hooks/use-toast).
 export function Toaster() {
   const { toasts } = useToast()
 

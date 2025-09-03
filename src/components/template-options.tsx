@@ -1,5 +1,8 @@
+
 'use client';
 
+// TemplateOptions provides UI for customizing resume template and style options.
+// Allows users to select color, font, size, margin, line height, and skill spacing.
 import {
   Select,
   SelectContent,
@@ -12,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Template, StyleOptions } from '@/lib/types';
 import { Input } from './ui/input';
 
+// Props for TemplateOptions component.
 type TemplateOptionsProps = {
   template: Template;
   setTemplate: (template: Template) => void;
@@ -19,6 +23,7 @@ type TemplateOptionsProps = {
   setStyleOptions: (options: StyleOptions) => void;
 };
 
+// Available color, font, and style options for customization.
 const colors = [
   { name: 'Blue', value: '#5DADE2' },
   { name: 'Green', value: '#48C9B0' },
@@ -30,7 +35,13 @@ const colors = [
 const fonts = ['Inter', 'Roboto', 'Lato', 'Merriweather', 'Georgia'];
 const fontSizes = ['10pt', '10.5pt', '11pt', '11.5pt', '12pt'];
 const margins = ['1.25cm', '1.5cm', '1.75cm', '2cm', '2.25cm'];
+const lineHeights = ['1.3', '1.4', '1.5', '1.6', '1.7'];
+const skillSpacings = ['0.5rem', '0.75rem', '1rem', '1.25rem', '1.5rem', '1.75rem', '2rem'];
 
+/**
+ * UI component for customizing resume template and style options.
+ * Allows selection of color, font, size, margin, line height, and skill spacing.
+ */
 export function TemplateOptions({
   template,
   setTemplate,
@@ -46,7 +57,7 @@ export function TemplateOptions({
       <CardHeader>
         <CardTitle>Design Options</CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
         <div className="space-y-2">
           <Label>Template</Label>
           <Select value={template} onValueChange={(value: Template) => setTemplate(value)}>
@@ -106,6 +117,28 @@ export function TemplateOptions({
             </SelectTrigger>
             <SelectContent>
               {margins.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label>Line Spacing</Label>
+          <Select value={styleOptions.lineHeight} onValueChange={(v) => handleStyleChange('lineHeight', v)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select spacing" />
+            </SelectTrigger>
+            <SelectContent>
+              {lineHeights.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label>Skill Spacing</Label>
+          <Select value={styleOptions.skillSpacing} onValueChange={(v) => handleStyleChange('skillSpacing', v)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select spacing" />
+            </SelectTrigger>
+            <SelectContent>
+              {skillSpacings.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>

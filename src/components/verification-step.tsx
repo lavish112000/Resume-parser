@@ -1,6 +1,9 @@
 
+
 'use client';
 
+// VerificationStep allows users to review and edit parsed resume data before finalizing.
+// Provides UI for editing, confirming, or canceling the parsed resume.
 import { useState } from 'react';
 import type { ResumeData } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -9,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Check, Edit, X } from 'lucide-react';
 
+// Props for VerificationStep component.
 interface VerificationStepProps {
   parsedData: ResumeData;
   onComplete: (data: ResumeData) => void;
@@ -16,18 +20,35 @@ interface VerificationStepProps {
   fileName: string | null;
 }
 
+/**
+ * Component for reviewing and editing parsed resume data before confirmation.
+ * Allows editing of all resume fields and sections.
+ */
 export function VerificationStep({ parsedData, onComplete, onCancel, fileName }: VerificationStepProps) {
   const [editableData, setEditableData] = useState<ResumeData>(parsedData);
   const [isEditing, setIsEditing] = useState<string | null>(null);
 
-  const handleInputChange = (section: keyof ResumeData, value: any, index?: number) => {
-    if (index !== undefined && Array.isArray(editableData[section])) {
-      const sectionArray = [...(editableData[section] as any[])];
-      sectionArray[index] = { ...sectionArray[index], ...value };
-      setEditableData({ ...editableData, [section]: sectionArray });
-    } else {
-      setEditableData({ ...editableData, [section]: value });
+  // Handles input changes for all resume sections and fields.
+  const handleInputChange = (section: keyof ResumeData, value: any, index?: number, subIndex?: number, field?: string) => {
+    const newEditableData = JSON.parse(JSON.stringify(editableData));
+
+    if (section === 'skills' && index !== undefined && subIndex !== undefined) {
+        newEditableData.skills[index].skills[subIndex].name = value;
+    } else if (section === 'skills' && index !== undefined) {
+        newEditableData.skills[index].category = value;
+    } else if (section === 'links' && index !== undefined && field) {
+        if (!newEditableData.links) newEditableData.links = [];
+        newEditableData.links[index][field] = value;
     }
+    else if (index !== undefined && Array.isArray(newEditableData[section])) {
+      const sectionArray = [...(newEditableData[section] as any[])];
+      sectionArray[index] = { ...sectionArray[index], ...value };
+      newEditableData[section] = sectionArray;
+    }
+     else {
+      newEditableData[section] = value;
+    }
+    setEditableData(newEditableData);
   };
   
   const renderField = (label: string, value: string, onSave: () => void, children: React.ReactNode) => (
@@ -67,6 +88,19 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
               {renderField("Phone", editableData.phone, () => setIsEditing(null), 
                 <Input value={editableData.phone} onChange={(e) => handleInputChange('phone', e.target.value)} />
               )}
+            </div>
+             <div className="mt-4">
+              <h4 className="font-semibold text-muted-foreground mb-2">Links</h4>
+              {editableData.links?.map((link, index) => (
+                <div key={index} className="p-2 border rounded-lg mb-2 bg-muted/20">
+                  {renderField(`Link ${index + 1}: Label`, link.label, () => setIsEditing(null),
+                    <Input value={link.label} onChange={(e) => handleInputChange('links', e.target.value, index, undefined, 'label')} />
+                  )}
+                  {renderField(`Link ${index + 1}: URL`, link.url, () => setIsEditing(null),
+                    <Input value={link.url} onChange={(e) => handleInputChange('links', e.target.value, index, undefined, 'url')} />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
           
@@ -121,12 +155,25 @@ export function VerificationStep({ parsedData, onComplete, onCancel, fileName }:
           </div>
 
           {/* Skills */}
-          <div className="mb-6">
-            <h3 className="text-xl font-bold mb-3 border-b pb-2">Skills</h3>
-             {renderField("Skills", editableData.skills.join(', '), () => setIsEditing(null), 
-                <Input value={editableData.skills.join(', ')} onChange={(e) => handleInputChange('skills', e.target.value.split(',').map(s => s.trim()))} />
-              )}
-          </div>
+            <div className="mb-6">
+                <h3 className="text-xl font-bold mb-3 border-b pb-2">Skills</h3>
+                {editableData.skills?.map((cat, catIndex) => (
+                <div key={catIndex} className="p-4 border rounded-lg mb-4 bg-muted/20">
+                    {renderField(`Category: ${cat.category}`, cat.category, () => setIsEditing(null),
+                        <Input value={cat.category} onChange={(e) => handleInputChange('skills', e.target.value, catIndex)} />
+                    )}
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                        {cat.skills.map((skill, skillIndex) => (
+                            <div key={skillIndex}>
+                               {renderField(`Skill`, skill.name, () => setIsEditing(null),
+                                    <Input value={skill.name} onChange={(e) => handleInputChange('skills', e.target.value, catIndex, skillIndex)} />
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                ))}
+            </div>
           
           <div className="flex justify-end gap-4 mt-8">
             <Button variant="outline" onClick={onCancel}>

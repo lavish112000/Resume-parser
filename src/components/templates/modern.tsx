@@ -1,7 +1,22 @@
-'use client';
+"use client";
 
+/**
+ * ModernTemplate
+ * --------------
+ * A two-column "modern" resume template optimized for on-screen viewing and PDF export.
+ *
+ * Responsibilities:
+ * - Render structured `ResumeData` into a visually modern layout with a sidebar.
+ * - Expose CSS custom properties for runtime style adjustments via `styleOptions`.
+ * - Group custom sections evenly between main content and sidebar for flexible layouts.
+ *
+ * Security note:
+ * - This component uses `dangerouslySetInnerHTML` to convert newline-delimited
+ *   descriptions into <ul> lists. The data is expected to come from the user's
+ *   own resume. If your data source changes, sanitize HTML before injecting.
+ */
 import type { ResumeData, StyleOptions } from '@/lib/types';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Linkedin, Github, Globe } from 'lucide-react';
 import { CSSProperties } from 'react';
 
 type TemplateProps = {
@@ -10,14 +25,103 @@ type TemplateProps = {
 };
 
 export function ModernTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills } = data;
+  const { name, email, phone, links, summary, experience, education, skills, customSections } = data;
   
   const cssVariables = {
     '--primary-color': styleOptions.color,
     '--font-family': styleOptions.fontFamily,
     '--font-size': styleOptions.fontSize,
     '--margin': styleOptions.margin,
+    '--line-height': styleOptions.lineHeight,
+    '--skill-spacing': styleOptions.skillSpacing,
   } as CSSProperties;
+  
+  const formatDescription = (description: string) => {
+    if (!description) return '';
+    const listItems = description
+      .split('\n')
+      .filter(line => line.trim() !== '')
+      .map(line => `<li>${line.replace(/^- ?/, '').trim()}</li>`)
+      .join('');
+    return `<ul>${listItems}</ul>`;
+  };
+  
+  const getLinkIcon = (label: string) => {
+    const lowerCaseLabel = label.toLowerCase();
+    if (lowerCaseLabel.includes('linkedin')) {
+      return <Linkedin size={14} />;
+    }
+    if (lowerCaseLabel.includes('github')) {
+      return <Github size={14} />;
+    }
+    return <Globe size={14} />;
+  };
+
+  const mainContent = (
+    <>
+      <h2>Experience</h2>
+      {experience?.map((job, index) => (
+        <div key={index} className="experience-item">
+          <div className="experience-header">
+            <h3>{job.title} | <span className="company-name">{job.company}</span></h3>
+            <span className="text-sm text-gray-600">{job.dates}</span>
+          </div>
+          <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(job.description) }} />
+        </div>
+      ))}
+      {customSections?.map((section, index) => {
+        if (index % 2 === 0) { // even index custom sections go to main content
+          return (
+            <div key={index}>
+              <h2>{section.title}</h2>
+              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(section.description) }} />
+            </div>
+          )
+        }
+        return null;
+      })}
+    </>
+  );
+
+  const sidebarContent = (
+    <>
+      <h2>Education</h2>
+      {education?.map((edu, index) => (
+        <div key={index} className="education-item">
+          <h3>{edu.degree}</h3>
+          <p className="text-sm text-gray-700">{edu.institution}</p>
+          <p className="text-xs text-gray-500">{edu.dates}</p>
+          {edu.description && <p className="text-sm text-gray-700">{edu.description}</p>}
+        </div>
+      ))}
+
+      <h2>Skills</h2>
+      {skills?.map((category, index) => (
+        <div key={index} className="skills-category">
+            <h4 className="skills-category-title">{category.category}</h4>
+            <div className="skills-list">
+            {category.skills?.map((skill, skillIndex) => (
+                <span key={skillIndex} className="skill-item">{skill.name}</span>
+            ))}
+            </div>
+        </div>
+      ))}
+
+
+      {customSections?.map((section, index) => {
+        if (index % 2 !== 0) { // odd index custom sections go to sidebar
+          return (
+            <div key={index}>
+              <h2>{section.title}</h2>
+              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(section.description) }} />
+            </div>
+          )
+        }
+        return null;
+      })}
+    </>
+  );
+
 
   return (
     <div className="a4-page bg-white" style={cssVariables}>
@@ -29,17 +133,22 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
           margin: 0 auto;
           font-family: var(--font-family), sans-serif;
           font-size: var(--font-size);
-          line-height: 1.5;
+          line-height: var(--line-height);
           color: #1f2937;
         }
         h1, h2, h3, h4 { color: var(--primary-color); }
         h1 { font-size: 2.25em; margin-bottom: 0.25rem; font-weight: 700; }
         h2 { font-size: 1.25em; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.25rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
         h3 { font-size: 1.1em; font-weight: 600; }
-        .contact-info { display: flex; gap: 1.5rem; justify-center; margin-bottom: 1.5rem; font-size: 0.9em; }
+        h4 { font-size: 1em; font-weight: 600; margin-bottom: 0.5rem; }
+        .contact-info { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; justify-content: center; margin-bottom: 1.5rem; font-size: 0.9em; }
         .contact-item { display: flex; align-items: center; gap: 0.5rem; }
+        .contact-item a { color: inherit; text-decoration: none; }
+        .contact-item a:hover { text-decoration: underline; }
         .section-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
-        .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .skills-category { margin-bottom: 1rem; }
+        .skills-category-title { font-size: 1em; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary-color); }
+        .skills-list { display: flex; flex-wrap: wrap; gap: var(--skill-spacing); }
         .skill-item { background-color: #e8e8e8; color: #333; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.9em; }
         .experience-item, .education-item { margin-bottom: 1.25rem; }
         .experience-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
@@ -49,6 +158,13 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
             --tw-prose-body: #374151;
             --tw-prose-bullets: #4b5563;
         }
+         .prose ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+        }
+         .prose li {
+            margin-bottom: 0.25rem;
+        }
       `}</style>
       
       <header className="text-center mb-6">
@@ -56,6 +172,12 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
         <div className="contact-info">
           <div className="contact-item"><Mail size={14} /> {email}</div>
           <div className="contact-item"><Phone size={14} /> {phone}</div>
+           {links?.map((link, index) => (
+            <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" className="contact-item">
+               {getLinkIcon(link.label)}
+               <span>{link.label}</span>
+            </a>
+          ))}
         </div>
       </header>
 
@@ -65,35 +187,11 @@ export function ModernTemplate({ data, styleOptions }: TemplateProps) {
 
       <div className="section-grid">
         <div className="main-content">
-          <h2>Experience</h2>
-          {experience?.map((job, index) => (
-            <div key={index} className="experience-item">
-              <div className="experience-header">
-                <h3>{job.title} | <span className="company-name">{job.company}</span></h3>
-                <span className="text-sm text-gray-600">{job.dates}</span>
-              </div>
-              <div className="text-sm prose" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
-            </div>
-          ))}
+          {mainContent}
         </div>
         
         <div className="sidebar-content">
-          <h2>Education</h2>
-          {education?.map((edu, index) => (
-            <div key={index} className="education-item">
-              <h3>{edu.degree}</h3>
-              <p className="text-sm text-gray-700">{edu.institution}</p>
-              <p className="text-xs text-gray-500">{edu.dates}</p>
-              {edu.description && <p className="text-sm text-gray-700">{edu.description}</p>}
-            </div>
-          ))}
-
-          <h2>Skills</h2>
-          <div className="skills-list">
-            {skills?.map((skill, index) => (
-              <span key={index} className="skill-item">{skill}</span>
-            ))}
-          </div>
+          {sidebarContent}
         </div>
       </div>
     </div>

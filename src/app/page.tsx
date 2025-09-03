@@ -1,3 +1,6 @@
+
+// Home is the main landing page for the resume builder application.
+// It manages resume upload, parsing, editing, template selection, and preview.
 'use client';
 
 import { useState, useRef } from 'react';
@@ -9,15 +12,35 @@ import { ResumeEditor } from '@/components/resume-editor';
 import { AppHeader } from '@/components/app-header';
 import { LandingPage } from '@/components/landing-page';
 import { VerificationStep } from '@/components/verification-step';
+import { ResumePreview } from '@/components/resume-preview';
+import type { StyleOptions, Template } from '@/lib/types';
 
+/**
+ * Main page component for resume upload, parsing, and editing.
+ * Handles file input, drag-and-drop, template selection, and style customization.
+ */
 export default function Home() {
+  // State for resume data, parsed data, loading status, file name, template, and style options.
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [parsedData, setParsedData] = useState<ResumeData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [template, setTemplate] = useState<Template>('ats');
+  const [styleOptions, setStyleOptions] = useState<StyleOptions>({
+    fontFamily: 'Inter',
+    fontSize: '11pt',
+    color: '#000000',
+    margin: '1.5cm',
+    lineHeight: '1.4',
+    skillSpacing: '0.5rem',
+  });
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  /**
+   * Handles file input change event for resume upload.
+   * @param event - File input change event
+   */
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -25,6 +48,10 @@ export default function Home() {
     }
   };
 
+  /**
+   * Handles drag over event for drag-and-drop file upload.
+   * @param event - Drag event
+   */
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
@@ -60,10 +87,20 @@ export default function Home() {
       try {
         const resumeDataUri = e.target?.result as string;
         if (!resumeDataUri) throw new Error('Could not read file.');
+        console.log('Resume Data URI:', resumeDataUri.slice(0, 100)); // Log first 100 chars
         const data = await parseResume({ resumeDataUri });
+        console.log('Parsed Resume Data:', data);
+        // Fallback: If critical fields are missing, show a warning
+        if (!data || !data.name || !data.email || !data.experience || data.experience.length === 0) {
+          toast({
+            variant: 'default',
+            title: 'Partial Extraction',
+            description: 'Some data could not be extracted. Please verify and complete missing fields.'
+          });
+        }
         setParsedData(data);
       } catch (error) {
-        console.error(error);
+        console.error('Resume parsing error:', error);
         toast({
           variant: 'destructive',
           title: 'Parsing Failed',
@@ -95,8 +132,78 @@ export default function Home() {
     }
   }
 
+  // PDF export using html2pdf.js
+  const handleDownloadPDF = () => {
+    import('html2pdf.js').then(html2pdf => {
+      const element = document.createElement('div');
+      document.body.appendChild(element);
+      element.style.display = 'none';
+      element.innerHTML = document.getElementById('printable-resume')?.innerHTML || '';
+      html2pdf.default().from(element).set({
+        margin: 0.5,
+        filename: 'resume.pdf',
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      }).save().then(() => {
+        document.body.removeChild(element);
+      });
+    });
+  };
+
+  // Docx export using docx
+  const handleDownloadDocx = async () => {
+    const { Document, Packer, Paragraph, TextRun } = await import('docx');
+    // Simple docx export (expand for full resume)
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({ text: resumeData?.name || '', bold: true, size: 32 }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun(resumeData?.summary || ''),
+            ],
+          }),
+          // ...add more fields as needed
+        ],
+      }],
+    });
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'resume.docx';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (resumeData) {
-    return <ResumeEditor initialResumeData={resumeData} onReset={resetApp} />;
+    return (
+      <>
+        <ResumeEditor 
+          initialResumeData={resumeData} 
+          onReset={resetApp} 
+          onDownload={handleDownloadPDF}
+          template={template}
+          setTemplate={setTemplate}
+          styleOptions={styleOptions}
+          setStyleOptions={setStyleOptions}
+          setLiveResumeData={setResumeData}
+          onDownloadDocx={handleDownloadDocx}
+        />
+        <div id="printable-resume" className="hidden">
+          <ResumePreview
+            data={resumeData}
+            template={template}
+            styleOptions={styleOptions}
+          />
+        </div>
+      </>
+    );
   }
 
   if (parsedData) {

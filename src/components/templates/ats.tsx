@@ -1,6 +1,24 @@
-'use client';
+"use client";
+
+/**
+ * AtsTemplate
+ * -----------
+ * An Applicant Tracking System (ATS) friendly resume template. This template
+ * favors simple semantic markup, conservative fonts, and predictable layout so
+ * parsing tools can reliably extract content.
+ *
+ * Responsibilities:
+ * - Render resume content using simple blocks and lists (avoid complex CSS that
+ *   might confuse parsers).
+ * - Use system fonts and conservative sizes to maximize compatibility.
+ *
+ * Notes:
+ * - This template forces a monospaced/simple layout common in ATS-compatibility
+ *   recommendations. Use it when you plan to submit resumes to automated systems.
+ */
 import type { ResumeData, StyleOptions } from '@/lib/types';
 import { CSSProperties } from 'react';
+import { Linkedin, Github, Globe } from 'lucide-react';
 
 type TemplateProps = {
   data: ResumeData;
@@ -8,14 +26,38 @@ type TemplateProps = {
 };
 
 export function AtsTemplate({ data, styleOptions }: TemplateProps) {
-  const { name, email, phone, summary, experience, education, skills } = data;
+  const { name, email, phone, links, summary, experience, education, skills, customSections } = data;
 
   const cssVariables = {
     '--primary-color': styleOptions.color,
     '--font-family': 'Arial, sans-serif',
     '--font-size': '11pt',
     '--margin': styleOptions.margin,
+    '--line-height': styleOptions.lineHeight,
+    '--skill-spacing': styleOptions.skillSpacing,
   } as CSSProperties;
+  
+  const formatDescription = (description: string) => {
+    if (!description) return '';
+    const listItems = description
+      .split('\n')
+      .filter(line => line.trim() !== '')
+      .map(line => `<li>${line.replace(/^- ?/, '').trim()}</li>`)
+      .join('');
+    return `<ul>${listItems}</ul>`;
+  };
+  
+  const getLinkIcon = (label: string) => {
+    const lowerCaseLabel = label.toLowerCase();
+    if (lowerCaseLabel.includes('linkedin')) {
+      return <Linkedin size={14} />;
+    }
+    if (lowerCaseLabel.includes('github')) {
+      return <Github size={14} />;
+    }
+    return <Globe size={14} />;
+  };
+
 
   return (
     <div className="a4-page bg-white text-black" style={cssVariables}>
@@ -27,13 +69,15 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
           margin: 0 auto;
           font-family: var(--font-family);
           font-size: var(--font-size);
-          line-height: 1.4;
+          line-height: var(--line-height);
           color: #111827;
         }
         .header { text-align: left; margin-bottom: 1.5rem; }
         h1 { font-size: 2em; margin-bottom: 0.25rem; font-weight: bold; color: black; }
         .contact-info { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 0.9em; margin-bottom: 1.5rem; }
         .contact-item { display: flex; align-items: center; gap: 0.5rem; }
+        .contact-item a { color: inherit; text-decoration: none; }
+        .contact-item a:hover { text-decoration: underline; }
         h2 { font-size: 1.2em; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #333; padding-bottom: 0.25rem; margin-top: 1.25rem; margin-bottom: 0.75rem; font-weight: bold; color: black; }
         h3 { font-size: 1em; font-weight: bold; }
         .experience-item, .education-item { margin-bottom: 1rem; }
@@ -41,7 +85,21 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         .company-name { font-style: normal; }
         .description ul { list-style-type: disc; margin: 0; padding-left: 1.25rem; }
         .description li { margin-bottom: 0.25rem; }
-        .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0; margin: 0; list-style-type: none; }
+        .skills-section { margin-top: 1.25rem; }
+        .skills-category { margin-bottom: 0.75rem; }
+        .skills-category-title { font-weight: bold; margin-bottom: 0.25rem; }
+        .skills-list { display: flex; flex-wrap: wrap; gap: 0.25rem var(--skill-spacing); padding: 0; margin: 0; list-style-type: none; }
+        .prose {
+            --tw-prose-body: #1f2937;
+            --tw-prose-bullets: #4b5563;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+        }
+         .prose li {
+            margin-bottom: 0.25rem;
+        }
       `}</style>
       
       <header className="header">
@@ -49,6 +107,14 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
         <div className="contact-info">
           <div className="contact-item">{email}</div>
           <div className="contact-item">{phone}</div>
+           {links?.map((link, index) => (
+            <div key={index} className="contact-item">
+              <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                {getLinkIcon(link.label)}
+                {link.label}
+              </a>
+            </div>
+          ))}
         </div>
       </header>
 
@@ -65,7 +131,7 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
               <h3>{job.title}, <span className="company-name">{job.company}</span></h3>
               <span className="text-sm">{job.dates}</span>
             </div>
-            <div className="description text-sm" dangerouslySetInnerHTML={{ __html: `<ul>${job.description.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>` }} />
+            <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(job.description) }} />
           </div>
         ))}
       </section>
@@ -83,15 +149,29 @@ export function AtsTemplate({ data, styleOptions }: TemplateProps) {
           </div>
         ))}
       </section>
-
-      <section>
+      
+      <section className="skills-section">
         <h2>Skills</h2>
-        <ul className="skills-list">
-          {skills?.map((skill, index) => (
-            <li key={index}>{skill}</li>
-          ))}
-        </ul>
+        {skills?.map((category, index) => (
+            <div key={index} className="skills-category">
+                <p className="skills-category-title">{category.category}:</p>
+                <ul className="skills-list">
+                {category.skills?.map((skill, skillIndex) => (
+                    <li key={skillIndex}>{skill.name}</li>
+                ))}
+                </ul>
+            </div>
+        ))}
       </section>
+
+
+       {customSections?.map((section, index) => (
+        <section key={index}>
+          <h2>{section.title}</h2>
+          <div className="description text-sm prose" dangerouslySetInnerHTML={{ __html: formatDescription(section.description) }} />
+        </section>
+      ))}
+
     </div>
   );
 }

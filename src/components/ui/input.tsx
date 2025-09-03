@@ -2,6 +2,11 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+// Input primitive
+// ----------------
+// Thin wrapper around the HTML input adding our design-system classes and
+// focus/disabled styles. Keep this small to remain usable in forms and
+// other components.
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, ...props }, ref) => {
     return (
