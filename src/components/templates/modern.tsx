@@ -1,5 +1,20 @@
-'use client';
+"use client";
 
+/**
+ * ModernTemplate
+ * --------------
+ * A two-column "modern" resume template optimized for on-screen viewing and PDF export.
+ *
+ * Responsibilities:
+ * - Render structured `ResumeData` into a visually modern layout with a sidebar.
+ * - Expose CSS custom properties for runtime style adjustments via `styleOptions`.
+ * - Group custom sections evenly between main content and sidebar for flexible layouts.
+ *
+ * Security note:
+ * - This component uses `dangerouslySetInnerHTML` to convert newline-delimited
+ *   descriptions into <ul> lists. The data is expected to come from the user's
+ *   own resume. If your data source changes, sanitize HTML before injecting.
+ */
 import type { ResumeData, StyleOptions } from '@/lib/types';
 import { Mail, Phone, Linkedin, Github, Globe } from 'lucide-react';
 import { CSSProperties } from 'react';
