@@ -1,10 +1,25 @@
 
 
 'use client';
-
-// ResumeForm is the main form for editing resume data.
-// Uses React Hook Form for state management and validation.
-// Includes subforms for skills, experience, education, custom sections, and links.
+/**
+ * ResumeForm
+ * ----------
+ * The primary data entry surface for building and editing a resume.
+ *
+ * Responsibilities:
+ * - Provide a single form state using React Hook Form to keep inputs performant and
+ *   validation-friendly.
+ * - Break the resume into logical sub-forms (skills, experience, education, links,
+ *   custom sections) and use `useFieldArray` for all repeatable groups.
+ * - Expose fine-grained AI assist buttons (ImproveButton) for content improvement
+ *   at the field/section level.
+ *
+ * Contract / Expectations:
+ * - The component expects the parent to initialize the form context and submit
+ *   the final value. It focuses on providing fields and local helpers only.
+ * - Keep side-effects (network, file I/O) out of this component; use callbacks
+ *   from the parent instead.
+ */
 import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import type { ResumeData } from '@/lib/types';

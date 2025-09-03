@@ -1,4 +1,24 @@
-'use client';
+"use client";
+
+/**
+ * ClassicTemplate
+ * ----------------
+ * A printable/resumable "classic" resume template renderer.
+ *
+ * Responsibilities:
+ * - Accepts structured `ResumeData` and `StyleOptions` and renders a styled A4 page.
+ * - Exposes controlled CSS custom properties so the parent can tweak fonts, spacing,
+ *   colors, and margins without editing the component.
+ * - Formats multi-line descriptions into HTML lists for compact printing.
+ *
+ * Important notes / integration points:
+ * - This component uses inline styles (CSS custom properties) to allow runtime
+ *   theme/style changes. Consumers should pass `styleOptions` from UI controls.
+ * - For print/PDF output the A4 sizing is applied via `.a4-page` (210mm x 297mm).
+ * - When using `dangerouslySetInnerHTML` be careful with untrusted input — all
+ *   resume input originates from the user's own data, but if you add server-side
+ *   or third-party content sanitize it first.
+ */
 import type { ResumeData, StyleOptions } from '@/lib/types';
 import { Mail, Phone, Linkedin, Github, Globe } from 'lucide-react';
 import { CSSProperties } from 'react';

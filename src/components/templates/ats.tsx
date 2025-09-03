@@ -1,4 +1,21 @@
-'use client';
+"use client";
+
+/**
+ * AtsTemplate
+ * -----------
+ * An Applicant Tracking System (ATS) friendly resume template. This template
+ * favors simple semantic markup, conservative fonts, and predictable layout so
+ * parsing tools can reliably extract content.
+ *
+ * Responsibilities:
+ * - Render resume content using simple blocks and lists (avoid complex CSS that
+ *   might confuse parsers).
+ * - Use system fonts and conservative sizes to maximize compatibility.
+ *
+ * Notes:
+ * - This template forces a monospaced/simple layout common in ATS-compatibility
+ *   recommendations. Use it when you plan to submit resumes to automated systems.
+ */
 import type { ResumeData, StyleOptions } from '@/lib/types';
 import { CSSProperties } from 'react';
 import { Linkedin, Github, Globe } from 'lucide-react';
