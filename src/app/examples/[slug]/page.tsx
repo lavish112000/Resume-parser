@@ -1,4 +1,6 @@
 
+// ExampleDetailPage displays a detailed view of a specific resume example.
+// It selects the correct template and renders the resume data for the given slug.
 import { AppHeader } from '@/components/app-header';
 import { AtsTemplate } from '@/components/templates/ats';
 import { ModernTemplate } from '@/components/templates/modern';
@@ -7,13 +9,22 @@ import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
+/**
+ * Page component for viewing a single resume example by slug.
+ * @param params - Route parameters containing the example slug.
+ */
 export default function ExampleDetailPage({ params }: { params: { slug: string } }) {
+  // Find the example data by slug.
   const example = resumeExamples.find(e => e.slug === params.slug);
 
+  // If not found, show 404.
   if (!example) {
     notFound();
   }
 
+  /**
+   * Renders the correct resume template based on example data.
+   */
   const renderTemplate = () => {
       switch(example.template) {
         case 'ats':
@@ -37,6 +48,7 @@ export default function ExampleDetailPage({ params }: { params: { slug: string }
       }
   }
 
+  // Render the example detail page UI.
   return (
     <div className="flex flex-col min-h-screen">
       <AppHeader />
