@@ -1,5 +1,8 @@
+
 'use client';
 
+// TemplateGallery displays all available resume templates for selection.
+// Includes search, category filters, featured templates, and preview dialog.
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,6 +24,7 @@ import {
   Heart
 } from 'lucide-react';
 
+// Template type for gallery items.
 interface Template {
   id: string;
   name: string;
@@ -33,6 +37,7 @@ interface Template {
   tags: string[];
 }
 
+// Demo template data for gallery display.
 const templates: Template[] = [
   {
     id: '1',
