@@ -1,16 +1,19 @@
+
 'use server';
 
 /**
- * @fileOverview An AI agent for improving resume content.
+ * AI agent for improving resume content using Genkit.
+ * Defines input/output schemas and the main improvement function for resume text.
  *
- * - improveResumeContent - A function that handles the resume content improvement process.
- * - ImproveResumeContentInput - The input type for the improveResumeContent function.
- * - ImproveResumeContentOutput - The return type for the improveResumeContent function.
+ * - improveResumeContent: Main function to improve resume content.
+ * - ImproveResumeContentInput: Input type for resume improvement (expects resume text).
+ * - ImproveResumeContentOutput: Output type with improved resume text.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
+// Input schema for resume improvement (expects resume text string).
 const ImproveResumeContentInputSchema = z.object({
   resumeContent: z
     .string()
@@ -18,6 +21,7 @@ const ImproveResumeContentInputSchema = z.object({
 });
 export type ImproveResumeContentInput = z.infer<typeof ImproveResumeContentInputSchema>;
 
+// Output schema for improved resume content (string with suggestions).
 const ImproveResumeContentOutputSchema = z.object({
   improvedContent: z
     .string()
@@ -25,10 +29,12 @@ const ImproveResumeContentOutputSchema = z.object({
 });
 export type ImproveResumeContentOutput = z.infer<typeof ImproveResumeContentOutputSchema>;
 
+// Main function to improve resume content using the defined AI flow.
 export async function improveResumeContent(input: ImproveResumeContentInput): Promise<ImproveResumeContentOutput> {
   return improveResumeContentFlow(input);
 }
 
+// Prompt definition for the AI model to improve resume content.
 const prompt = ai.definePrompt({
   name: 'improveResumeContentPrompt',
   input: {schema: ImproveResumeContentInputSchema},
