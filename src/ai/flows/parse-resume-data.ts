@@ -1,25 +1,29 @@
+
 'use server';
 
 /**
- * @fileOverview An AI agent for parsing resume data from various file formats.
+ * AI agent for parsing resume data from various file formats.
+ * Defines input/output schemas and the main parsing function for extracting structured resume information.
  *
- * - parseResume - A function that handles the resume parsing process.
- * - ParseResumeInput - The input type for the parseResume function, accepting resume data as a data URI.
- * - ParseResumeOutput - The return type for the parseResume function, providing structured resume data.
+ * - parseResume: Main function to parse resume data from a data URI.
+ * - ParseResumeInput: Input type for resume parsing (expects data URI).
+ * - ParseResumeOutput: Output type with structured resume fields.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
+// Input schema for resume parsing (expects a data URI string).
 const ParseResumeInputSchema = z.object({
   resumeDataUri: z
     .string()
     .describe(
-      'The resume file data, as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.' // Explicitly using single quotes to avoid confusion
+      'The resume file data, as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
     ),
 });
 export type ParseResumeInput = z.infer<typeof ParseResumeInputSchema>;
 
+// Output schema for parsed resume data (structured fields).
 const ParseResumeOutputSchema = z.object({
   name: z.string().describe('The name of the resume owner.'),
   email: z.string().describe('The email address of the resume owner.'),
