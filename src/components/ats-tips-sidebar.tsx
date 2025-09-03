@@ -1,3 +1,14 @@
+"use client";
+
+/**
+ * ATSTipsSidebar
+ * ---------------
+ * Provides quick, actionable ATS optimization tips based on the provided
+ * `ResumeData`. The component performs lightweight checks (contact info,
+ * summary length, experience completeness, skills) and presents user-friendly
+ * recommendations.
+ */
+
 import React from 'react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
