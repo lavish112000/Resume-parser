@@ -1,20 +1,28 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  Menu, 
-  X, 
-  Bell, 
-  Search, 
-  User, 
+import {
+  Menu,
+  X,
+  Bell,
+  Search,
+  User,
   ChevronDown,
   Sun,
   Moon,
-  Globe
+  Globe,
+  Settings,
+  HelpCircle,
+  LogOut,
+  Crown,
+  Zap,
+  Shield
 } from 'lucide-react';
 import { useAppContext } from '@/contexts/app-context';
+import { useAuth } from '@/contexts/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
 
 interface TopBarProps {
   onSidebarToggle: () => void;
@@ -23,8 +31,15 @@ interface TopBarProps {
 
 export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
   const { currentState, resumeData, fileName } = useAppContext();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [notifications] = useState([
+    { id: 1, title: 'Resume optimized', message: 'Your resume is now ATS-friendly', unread: true },
+    { id: 2, title: 'Template updated', message: 'New modern template available', unread: true }
+  ]);
 
   const getPageTitle = () => {
     switch (currentState) {
@@ -68,6 +83,58 @@ export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
     }
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    // Implement search functionality
+    if (query.trim()) {
+      toast({
+        title: 'Search',
+        description: `Searching for "${query}"...`,
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: 'Signed Out',
+        description: 'You have been successfully signed out.',
+      });
+      setIsProfileOpen(false);
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to sign out. Please try again.',
+      });
+    }
+  };
+
+  const handleThemeToggle = () => {
+    setIsDarkMode(!isDarkMode);
+    toast({
+      title: 'Theme Changed',
+      description: `Switched to ${!isDarkMode ? 'dark' : 'light'} mode`,
+    });
+  };
+
+  const handleLanguageChange = () => {
+    toast({
+      title: 'Language',
+      description: 'Language selection coming soon!',
+    });
+  };
+
+  const handleNotificationsClick = () => {
+    toast({
+      title: 'Notifications',
+      description: `You have ${notifications.filter(n => n.unread).length} unread notifications`,
+    });
+  };
+
+  const unreadCount = notifications.filter(n => n.unread).length;
+
   return (
     <header className="glass h-16 flex items-center justify-between px-6 border-b border-white/10">
       <div className="flex items-center gap-4">
@@ -75,12 +142,13 @@ export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
           variant="ghost"
           size="sm"
           onClick={onSidebarToggle}
-          className="btn-glass border-none hover:bg-white/10 lg:hidden"
+          className="btn-glass border-none hover:bg-white/10 text-white lg:hidden"
+          title="Toggle sidebar"
         >
           {isSidebarOpen ? (
-            <X className="w-5 h-5 text-white" />
+            <X className="w-5 h-5" />
           ) : (
-            <Menu className="w-5 h-5 text-white" />
+            <Menu className="w-5 h-5" />
           )}
         </Button>
 
@@ -96,7 +164,10 @@ export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/50" />
           <Input
             placeholder="Search templates, examples..."
-            className="input-glass pl-10 w-64"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
+            className="input-glass pl-10 w-64 text-white placeholder:text-white/50"
           />
         </div>
 
@@ -104,13 +175,14 @@ export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className="btn-glass border-none hover:bg-white/10"
+          onClick={handleThemeToggle}
+          className="btn-glass border-none hover:bg-white/10 text-white"
+          title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
         >
           {isDarkMode ? (
-            <Sun className="w-5 h-5 text-white" />
+            <Sun className="w-5 h-5" />
           ) : (
-            <Moon className="w-5 h-5 text-white" />
+            <Moon className="w-5 h-5" />
           )}
         </Button>
 
@@ -118,9 +190,11 @@ export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="btn-glass border-none hover:bg-white/10 hidden sm:flex"
+          onClick={handleLanguageChange}
+          className="btn-glass border-none hover:bg-white/10 text-white hidden sm:flex"
+          title="Change language"
         >
-          <Globe className="w-5 h-5 text-white" />
+          <Globe className="w-5 h-5" />
           <span className="text-white/80 ml-2">EN</span>
         </Button>
 
@@ -128,12 +202,16 @@ export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="btn-glass border-none hover:bg-white/10 relative"
+          onClick={handleNotificationsClick}
+          className="btn-glass border-none hover:bg-white/10 text-white relative"
+          title="View notifications"
         >
-          <Bell className="w-5 h-5 text-white" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-            <span className="text-xs text-white font-bold">2</span>
-          </span>
+          <Bell className="w-5 h-5" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
+              <span className="text-xs text-white font-bold">{unreadCount}</span>
+            </span>
+          )}
         </Button>
 
         {/* Profile Dropdown */}
@@ -142,40 +220,56 @@ export function TopBar({ onSidebarToggle, isSidebarOpen }: TopBarProps) {
             variant="ghost"
             size="sm"
             onClick={() => setIsProfileOpen(!isProfileOpen)}
-            className="btn-glass border-none hover:bg-white/10 flex items-center gap-2"
+            className="btn-glass border-none hover:bg-white/10 text-white flex items-center gap-2"
+            title="User menu"
           >
             <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-              <User className="w-4 h-4 text-white" />
+              <User className="w-4 h-4" />
             </div>
-            <span className="text-white/80 hidden sm:block">John Doe</span>
+            <span className="text-white/80 hidden sm:block">
+              {user?.email?.split('@')[0] || 'User'}
+            </span>
             <ChevronDown className={`w-4 h-4 text-white/60 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
           </Button>
 
           {isProfileOpen && (
-            <div className="absolute right-0 top-full mt-2 w-56 glass-enhanced p-4 z-50 animate-slide-in-bottom">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 pb-3 border-b border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                    <User className="w-5 h-5 text-white" />
+            <div className="absolute right-0 top-full mt-2 w-64 bg-white/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-50 animate-slide-in-bottom">
+              <div className="p-4">
+                <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                    <User className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <div className="font-medium text-white">John Doe</div>
-                    <div className="text-sm text-white/60">john@example.com</div>
+                    <div className="font-semibold text-gray-900">
+                      {user?.email?.split('@')[0] || 'User'}
+                    </div>
+                    <div className="text-sm text-gray-600">{user?.email || 'user@example.com'}</div>
                   </div>
                 </div>
-                
-                <div className="space-y-1">
-                  <button className="w-full text-left px-3 py-2 text-sm text-white/80 hover:bg-white/10 rounded-lg transition-colors">
+
+                <div className="space-y-2 mt-4">
+                  <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-3">
+                    <Settings className="w-4 h-4" />
                     Profile Settings
                   </button>
-                  <button className="w-full text-left px-3 py-2 text-sm text-white/80 hover:bg-white/10 rounded-lg transition-colors">
+                  <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-3">
+                    <Crown className="w-4 h-4" />
                     Billing & Plans
                   </button>
-                  <button className="w-full text-left px-3 py-2 text-sm text-white/80 hover:bg-white/10 rounded-lg transition-colors">
+                  <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-3">
+                    <HelpCircle className="w-4 h-4" />
                     Help & Support
                   </button>
-                  <hr className="border-white/10 my-2" />
-                  <button className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
+                  <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-3">
+                    <Shield className="w-4 h-4" />
+                    Privacy & Security
+                  </button>
+                  <hr className="border-gray-200 my-2" />
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center gap-3"
+                  >
+                    <LogOut className="w-4 h-4" />
                     Sign Out
                   </button>
                 </div>

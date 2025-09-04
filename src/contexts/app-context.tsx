@@ -184,16 +184,16 @@ export function AppProvider({ children }: AppProviderProps) {
   }, []);
 
   // Helper methods
-  const setState = (newState: AppState) => dispatch({ type: 'SET_STATE', payload: newState });
-  const setResumeData = (data: ResumeData | null) => dispatch({ type: 'SET_RESUME_DATA', payload: data });
-  const setParsedData = (data: ResumeData | null) => dispatch({ type: 'SET_PARSED_DATA', payload: data });
-  const setLoading = (loading: boolean) => dispatch({ type: 'SET_LOADING', payload: loading });
-  const setFileName = (name: string | null) => dispatch({ type: 'SET_FILE_NAME', payload: name });
-  const setTemplate = (template: Template) => dispatch({ type: 'SET_TEMPLATE', payload: template });
-  const setStyleOptions = (options: StyleOptions) => dispatch({ type: 'SET_STYLE_OPTIONS', payload: options });
-  const navigateToState = (newState: AppState) => dispatch({ type: 'SET_STATE', payload: newState });
-  const goBack = () => dispatch({ type: 'GO_BACK' });
-  const resetApp = () => dispatch({ type: 'RESET_APP' });
+  const setState = useCallback((newState: AppState) => dispatch({ type: 'SET_STATE', payload: newState }), []);
+  const setResumeData = useCallback((data: ResumeData | null) => dispatch({ type: 'SET_RESUME_DATA', payload: data }), []);
+  const setParsedData = useCallback((data: ResumeData | null) => dispatch({ type: 'SET_PARSED_DATA', payload: data }), []);
+  const setLoading = useCallback((loading: boolean) => dispatch({ type: 'SET_LOADING', payload: loading }), []);
+  const setFileName = useCallback((name: string | null) => dispatch({ type: 'SET_FILE_NAME', payload: name }), []);
+  const setTemplate = useCallback((template: Template) => dispatch({ type: 'SET_TEMPLATE', payload: template }), []);
+  const setStyleOptions = useCallback((options: StyleOptions) => dispatch({ type: 'SET_STYLE_OPTIONS', payload: options }), []);
+  const navigateToState = useCallback((newState: AppState) => dispatch({ type: 'SET_STATE', payload: newState }), []);
+  const goBack = useCallback(() => dispatch({ type: 'GO_BACK' }), []);
+  const resetApp = useCallback(() => dispatch({ type: 'RESET_APP' }), []);
 
   const value: AppContextValue = {
     ...state,
