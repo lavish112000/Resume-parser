@@ -13,10 +13,13 @@ import {
   Star,
   Crown,
   ChevronRight,
-  Play
+  Play,
+  Zap
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAppContext } from '@/contexts/app-context';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 
 interface SidebarProps {
@@ -32,8 +35,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     navigateToState, 
     history 
   } = useAppContext();
+  const { toast } = useToast();
+  const router = useRouter();
   
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [isUpgradeMinimized, setIsUpgradeMinimized] = useState(false);
 
   const navigationItems = [
     {
@@ -114,7 +120,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const handleNavigation = (itemId: string) => {
     const item = navigationItems.find(item => item.id === itemId);
     if (item?.available) {
-      navigateToState(itemId as any);
+      // Use Next.js router for templates and dashboard pages
+      if (itemId === 'templates') {
+        router.push('/templates');
+      } else if (itemId === 'dashboard') {
+        router.push('/dashboard');
+      } else {
+        // Use state-based navigation for other pages
+        navigateToState(itemId as any);
+      }
       onClose();
     }
   };
@@ -272,20 +286,48 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
           {/* Footer */}
           <div className="p-4 border-t border-white/10">
-            <div className="glass-card p-4 text-center">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center">
-                <Crown className="w-6 h-6 text-white" />
-              </div>
-              <h4 className="text-white font-medium mb-1">Upgrade to Pro</h4>
-              <p className="text-xs text-white/60 mb-3">
-                Unlock premium templates and AI features
-              </p>
-              <Button 
-                size="sm" 
-                className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-none hover:shadow-lg transition-all duration-200"
+            <div className="glass-card p-4 text-center relative">
+              <button
+                onClick={() => setIsUpgradeMinimized(!isUpgradeMinimized)}
+                className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+                title={isUpgradeMinimized ? "Expand upgrade section" : "Minimize upgrade section"}
               >
-                Upgrade Now
-              </Button>
+                <ChevronRight className={`w-3 h-3 transition-transform ${isUpgradeMinimized ? 'rotate-90' : '-rotate-90'}`} />
+              </button>
+
+              {!isUpgradeMinimized && (
+                <>
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center">
+                    <Crown className="w-6 h-6 text-white" />
+                  </div>
+                  <h4 className="text-white font-medium mb-1">Upgrade to Pro</h4>
+                  <p className="text-xs text-white/60 mb-3">
+                    Unlock premium templates and AI features
+                  </p>
+                  <Button
+                    size="sm"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-none hover:shadow-lg transition-all duration-200"
+                    onClick={() => {
+                      toast({
+                        title: "Upgrade to Pro",
+                        description: "Redirecting to premium plans...",
+                      });
+                      // Add upgrade logic here
+                    }}
+                  >
+                    <Zap className="w-4 h-4 mr-2" />
+                    Upgrade Now
+                  </Button>
+                </>
+              )}
+
+              {isUpgradeMinimized && (
+                <div className="flex items-center justify-center py-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center">
+                    <Crown className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
