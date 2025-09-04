@@ -19,6 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ATSTipsSidebar } from '@/components/ats-tips-sidebar';
 import { ResumeAnalytics } from '@/components/resume-analytics';
+import { useTemplateContext } from '@/context/TemplateContext';
 
 // Zod schemas for validating resume sections.
 const experienceSchema = z.object({
@@ -73,10 +74,6 @@ type ResumeEditorProps = {
   onReset: () => void;
   onDownload: () => void;
   onDownloadDocx?: () => void;
-  template: Template;
-  setTemplate: (template: Template) => void;
-  styleOptions: StyleOptions;
-  setStyleOptions: (options: StyleOptions) => void;
   setLiveResumeData: (data: ResumeData) => void;
 };
 
@@ -85,12 +82,9 @@ export function ResumeEditor({
   onReset,
   onDownload,
   onDownloadDocx,
-  template,
-  setTemplate,
-  styleOptions,
-  setStyleOptions,
   setLiveResumeData,
 }: ResumeEditorProps) {
+  const { template, setTemplate, styleOptions, setStyleOptions } = useTemplateContext();
   const [activeTab, setActiveTab] = useState('form');
   
   const methods = useForm<any>({
@@ -124,12 +118,7 @@ export function ResumeEditor({
   <AppHeader isEditing onDownload={onDownload} onDownloadDocx={onDownloadDocx} onReset={onReset}/>
         <main className="flex-grow flex flex-col pt-20 px-4 sm:px-8">
           <div className="pb-4">
-            <TemplateOptions
-              template={template}
-              setTemplate={handleTemplateChange}
-              styleOptions={styleOptions}
-              setStyleOptions={setStyleOptions}
-            />
+            <TemplateOptions />
           </div>
           <div className="flex flex-col md:flex-row gap-8 min-h-0">
             {/* ATS Tips Sidebar */}
@@ -154,8 +143,6 @@ export function ResumeEditor({
                       <div className="a4-page-container">
                         <ResumePreview
                           data={resumeData}
-                          template={template}
-                          styleOptions={styleOptions}
                         />
                       </div>
                     </div>

@@ -1,8 +1,8 @@
 
-'use client';
+"use client";
 
 // TemplateOptions provides UI for customizing resume template and style options.
-// Allows users to select color, font, size, margin, line height, and skill spacing.
+// Now consumes global TemplateContext to centralize template/style state.
 import {
   Select,
   SelectContent,
@@ -12,16 +12,8 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Template, StyleOptions } from '@/lib/types';
 import { Input } from './ui/input';
-
-// Props for TemplateOptions component.
-type TemplateOptionsProps = {
-  template: Template;
-  setTemplate: (template: Template) => void;
-  styleOptions: StyleOptions;
-  setStyleOptions: (options: StyleOptions) => void;
-};
+import { useTemplateContext } from '@/context/TemplateContext';
 
 // Available color, font, and style options for customization.
 const colors = [
@@ -42,13 +34,10 @@ const skillSpacings = ['0.5rem', '0.75rem', '1rem', '1.25rem', '1.5rem', '1.75re
  * UI component for customizing resume template and style options.
  * Allows selection of color, font, size, margin, line height, and skill spacing.
  */
-export function TemplateOptions({
-  template,
-  setTemplate,
-  styleOptions,
-  setStyleOptions,
-}: TemplateOptionsProps) {
-  const handleStyleChange = (key: keyof StyleOptions, value: string) => {
+export function TemplateOptions() {
+  const { template, setTemplate, styleOptions, setStyleOptions } = useTemplateContext();
+
+  const handleStyleChange = (key: keyof typeof styleOptions, value: string) => {
     setStyleOptions({ ...styleOptions, [key]: value });
   };
 
@@ -60,7 +49,7 @@ export function TemplateOptions({
       <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
         <div className="space-y-2">
           <Label>Template</Label>
-          <Select value={template} onValueChange={(value: Template) => setTemplate(value)}>
+            <Select value={template} onValueChange={(value: any) => setTemplate(value)}>
             <SelectTrigger>
               <SelectValue placeholder="Select template" />
             </SelectTrigger>

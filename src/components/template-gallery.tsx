@@ -1,9 +1,13 @@
 
-'use client';
+"use client";
 
 // TemplateGallery displays all available resume templates for selection.
 // Includes search, category filters, featured templates, and preview dialog.
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useTemplateContext } from '@/context/TemplateContext';
+import { mapToAppTemplateFromName } from '@/lib/template-utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,8 +28,8 @@ import {
   Heart
 } from 'lucide-react';
 
-// Template type for gallery items.
-interface Template {
+// Local gallery template shape (kept separate from app Template union)
+interface GalleryTemplate {
   id: string;
   name: string;
   category: string;
@@ -38,7 +42,7 @@ interface Template {
 }
 
 // Demo template data for gallery display.
-const templates: Template[] = [
+const templates: GalleryTemplate[] = [
   {
     id: '1',
     name: 'Modern Professional',
@@ -116,9 +120,38 @@ const categories = [
 ];
 
 export function TemplateGallery() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const { setTemplate, setStyleOptions, requestOpenEditor, favorites, toggleFavorite } = useTemplateContext();
+
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<GalleryTemplate | null>(null);
+
+  // Map a gallery template to the app Template union used by the editor.
+  const mapToAppTemplate = (t: GalleryTemplate) => mapToAppTemplateFromName(t.name, t.tags);
+
+  // Apply the template: set context state and navigate to home.
+  const applyTemplate = (t: GalleryTemplate) => {
+    try {
+      const appTemplate = mapToAppTemplate(t);
+      setTemplate(appTemplate);
+      // set some sensible style defaults for chosen template
+      if (appTemplate === 'ats') {
+        setStyleOptions({ ...{ fontFamily: 'Arial, sans-serif', fontSize: '11pt', color: '#000000', margin: '1.5cm', lineHeight: '1.4', skillSpacing: '0.5rem' } });
+      } else if (appTemplate === 'classic') {
+        setStyleOptions({ ...{ fontFamily: 'Georgia', fontSize: '11pt', color: '#1f2937', margin: '1.5cm', lineHeight: '1.45', skillSpacing: '0.5rem' } });
+      } else {
+        setStyleOptions({ ...{ fontFamily: 'Inter', fontSize: '11pt', color: '#5DADE2', margin: '1.5cm', lineHeight: '1.4', skillSpacing: '0.5rem' } });
+      }
+      requestOpenEditor();
+      toast({ title: 'Template applied', description: `Opening editor with "${t.name}"` });
+      router.push('/');
+    } catch (err) {
+      console.error('Failed to apply template', err);
+      toast({ variant: 'destructive', title: 'Could not apply template', description: 'Please try again.' });
+    }
+  };
 
   const filteredTemplates = templates.filter(template => {
     const matchesCategory = selectedCategory === 'All' || template.category === selectedCategory;
@@ -189,8 +222,10 @@ export function TemplateGallery() {
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="flex gap-2">
-                    <Button className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md hover:shadow-xl" onClick={() => setSelectedTemplate(template)}>Use Template</Button>
-                    <Button variant="outline" size="icon"><Heart className="h-4 w-4" /></Button>
+                    <Button className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md hover:shadow-xl" onClick={() => applyTemplate(template)}>Use Template</Button>
+                    <Button variant={favorites.includes(template.id) ? 'default' : 'outline'} size="icon" onClick={() => toggleFavorite(template.id)}>
+                      <Heart className={`h-4 w-4 ${favorites.includes(template.id) ? 'text-pink-500 fill-pink-400' : ''}`} />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -272,8 +307,10 @@ export function TemplateGallery() {
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="flex gap-2">
-                  <Button className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md hover:shadow-xl" onClick={() => setSelectedTemplate(template)}>Use Template</Button>
-                  <Button variant="outline" size="icon"><Heart className="h-4 w-4" /></Button>
+                  <Button className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md hover:shadow-xl" onClick={() => applyTemplate(template)}>Use Template</Button>
+                  <Button variant={favorites.includes(template.id) ? 'default' : 'outline'} size="icon" onClick={() => toggleFavorite(template.id)}>
+                    <Heart className={`h-4 w-4 ${favorites.includes(template.id) ? 'text-pink-500 fill-pink-400' : ''}`} />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -299,13 +336,13 @@ export function TemplateGallery() {
                     <Eye className="mr-2 h-4 w-4" />
                     Preview
                   </Button>
-                  <Button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">Use Template</Button>
+                  <Button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white" onClick={() => selectedTemplate && applyTemplate(selectedTemplate)}>Use Template</Button>
                 </div>
               </DialogTitle>
             </DialogHeader>
             <div className="flex-1 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center">
               <div className="text-center">
-                <img src={selectedTemplate?.previewImage} alt={selectedTemplate?.name} className="object-cover w-64 h-80 rounded-lg mx-auto mb-4 shadow-lg" />
+                <img src={selectedTemplate?.previewImage} alt={selectedTemplate?.name} className="object-cover w-64 h-80 rounded-lg mx-auto mb-4 shadow-lg animate-scale-in" />
                 <p className="text-slate-600">This is a live preview of your selected template. All your resume data will be styled accordingly!</p>
               </div>
             </div>

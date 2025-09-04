@@ -1,25 +1,26 @@
 
-'use client';
+"use client";
 
 // ResumePreview renders a live preview of the resume using the selected template and style options.
-// Supports Modern, Classic, and ATS templates.
+// Now consumes TemplateContext for the active template and style options.
 import { ModernTemplate } from '@/components/templates/modern';
 import { ClassicTemplate } from '@/components/templates/classic';
 import { AtsTemplate } from '@/components/templates/ats';
-import type { ResumeData, StyleOptions, Template } from '@/lib/types';
+import type { ResumeData } from '@/lib/types';
+import { useTemplateContext } from '@/context/TemplateContext';
 
 // Props for ResumePreview component.
 type ResumePreviewProps = {
   data: ResumeData;
-  template: Template;
-  styleOptions: StyleOptions;
 };
 
 /**
  * Renders the resume preview using the selected template and style options.
  * Switches between Modern, Classic, and ATS templates.
  */
-export function ResumePreview({ data, template, styleOptions }: ResumePreviewProps) {
+export function ResumePreview({ data }: ResumePreviewProps) {
+  const { template, styleOptions } = useTemplateContext();
+
   const renderTemplate = () => {
     switch (template) {
       case 'modern':

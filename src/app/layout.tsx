@@ -4,6 +4,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { TemplateProvider } from '@/context/TemplateContext';
 
 // Metadata for SEO and browser theming.
 export const metadata: Metadata = {
@@ -32,11 +33,13 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen transition-smooth">
   {/* Page transition wrapper for smooth navigation */}
-        <div className="page-transition">
-          {children}
-        </div>
-  {/* Global notification toaster */}
-        <Toaster />
+        <TemplateProvider>
+          <div className="page-transition">
+            {children}
+          </div>
+          {/* Global notification toaster */}
+          <Toaster />
+        </TemplateProvider>
       </body>
     </html>
   );
