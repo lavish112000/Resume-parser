@@ -43,7 +43,7 @@ npm run dev
 
 - **Frontend**: Next.js 15 with App Router, TypeScript, Tailwind CSS
 - **Forms**: React Hook Form + Zod validation with multi-step wizard
-- **AI Integration**: Google Genkit for content optimization
+- **AI Integration**: (removed Genkit integration)
 - **Export**: html2pdf.js and docx for document generation
 - **UI Components**: Radix UI primitives with custom styling
 

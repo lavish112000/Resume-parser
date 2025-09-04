@@ -77,24 +77,37 @@ export function LandingPage({
                 <p className="text-sm text-muted-foreground">This might take a moment.</p>
               </div>
             ) : (
-              <div
-                className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-muted/20 transition-colors"
-                onDragOver={onDragOver}
-                onDrop={onDrop}
-                onClick={triggerFileSelect}
-              >
-                <UploadCloud className="h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-lg font-semibold">Drag & drop your resume here</p>
-                <p className="text-muted-foreground">or click to browse</p>
-                <p className="text-xs text-gray-500 mt-2">PDF, DOCX, or TXT</p>
+              <>
+                <div
+                  className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-muted/20 transition-colors"
+                  onDragOver={onDragOver}
+                  onDrop={onDrop}
+                  onClick={triggerFileSelect}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Upload resume file area - click to browse or drag and drop"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      triggerFileSelect();
+                    }
+                  }}
+                >
+                  <UploadCloud className="h-12 w-12 text-gray-400 mb-4" />
+                  <p className="text-lg font-semibold">Drag & drop your resume here</p>
+                  <p className="text-muted-foreground">or click to browse</p>
+                  <p className="text-xs text-gray-500 mt-2">PDF, DOCX, or TXT</p>
+                </div>
                 <input
                   ref={fileInputRef}
                   type="file"
                   className="hidden"
                   onChange={onFileChange}
                   accept=".pdf,.docx,.txt"
+                  aria-label="Upload resume file"
+                  title="Upload resume file (PDF, DOCX, or TXT)"
                 />
-              </div>
+              </>
             )}
             <div className="mt-6 flex items-center justify-center space-x-4">
               <div className="flex-grow border-t border-gray-300"></div>

@@ -9,9 +9,11 @@ export type ResumeData = ParseResumeOutput & {
     title: string;
     description: string;
   }[];
+  // The parser may return partial link data (label/url may be missing),
+  // so make these fields optional to match ParseResumeOutput.
   links?: {
-    label: string;
-    url: string;
+    label?: string;
+    url?: string;
   }[];
 };
 

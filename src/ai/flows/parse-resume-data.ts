@@ -1,110 +1,36 @@
 
 'use server';
 
-/**
- * AI agent for parsing resume data from various file formats.
- * Defines input/output schemas and the main parsing function for extracting structured resume information.
- *
- * - parseResume: Main function to parse resume data from a data URI.
- * - ParseResumeInput: Input type for resume parsing (expects data URI).
- * - ParseResumeOutput: Output type with structured resume fields.
- */
+// Lightweight replacement for Genkit-backed AI flows.
+// These implementations validate input and return a conservative default structure.
+import { z } from 'zod';
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-
-// Input schema for resume parsing (expects a data URI string).
-const ParseResumeInputSchema = z.object({
-  resumeDataUri: z
-    .string()
-    .describe(
-      'The resume file data, as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
-    ),
-});
+const ParseResumeInputSchema = z.object({ resumeDataUri: z.string() });
 export type ParseResumeInput = z.infer<typeof ParseResumeInputSchema>;
 
-// Output schema for parsed resume data (structured fields).
 const ParseResumeOutputSchema = z.object({
-  name: z.string().describe('The name of the resume owner.'),
-  email: z.string().describe('The email address of the resume owner.'),
-  phone: z.string().describe('The phone number of the resume owner.'),
-  summary: z.string().describe('A brief summary or objective statement from the resume.'),
-  experience: z
-    .array(
-      z.object({
-        title: z.string().describe('The job title.'),
-        company: z.string().describe('The company name.'),
-        dates: z.string().describe('The employment dates.'),
-        description: z.string().describe('A description of the job responsibilities.'),
-      })
-    )
-    .describe('A list of work experience entries.'),
-  education: z
-    .array(
-      z.object({
-        institution: z.string().describe('The name of the educational institution.'),
-        degree: z.string().describe('The degree obtained.'),
-        dates: z.string().describe('The graduation dates.'),
-        description: z.string().describe('Additional details about education.').optional(),
-      })
-    )
-    .describe('A list of education entries')
-    .optional(),
-  skills: z
-    .array(
-      z.object({
-        category: z.string().describe('The category of the skills (e.g., Programming Languages, Frameworks, Tools).'),
-        skills: z.array(z.object({ name: z.string() })).describe('A list of skills within this category.'),
-      })
-    )
-    .describe('A list of categorized skills.'),
-  links: z
-    .array(
-      z.object({
-        label: z.string().describe('The label for the link (e.g., "Portfolio", "LinkedIn", "GitHub").'),
-        url: z.string().url('The provided URL is not valid.').describe('The URL of the link.'),
-      })
-    )
-    .describe('A list of personal or professional links.')
-    .optional(),
+  name: z.string().optional(),
+  email: z.string().optional(),
+  phone: z.string().optional(),
+  summary: z.string().optional(),
+  experience: z.array(z.object({ title: z.string().optional(), company: z.string().optional(), dates: z.string().optional(), description: z.string().optional() })).optional(),
+  education: z.array(z.object({ institution: z.string().optional(), degree: z.string().optional(), dates: z.string().optional(), description: z.string().optional() })).optional(),
+  skills: z.array(z.object({ category: z.string().optional(), skills: z.array(z.object({ name: z.string().optional() })).optional() })).optional(),
+  links: z.array(z.object({ label: z.string().optional(), url: z.string().optional() })).optional(),
 });
 export type ParseResumeOutput = z.infer<typeof ParseResumeOutputSchema>;
 
 export async function parseResume(input: ParseResumeInput): Promise<ParseResumeOutput> {
-  return parseResumeFlow(input);
+  // Minimal stub implementation: validate input and return empty/default parsed structure.
+  ParseResumeInputSchema.parse(input);
+  return {
+    name: undefined,
+    email: undefined,
+    phone: undefined,
+    summary: undefined,
+    experience: [],
+    education: [],
+    skills: [],
+    links: [],
+  };
 }
-
-const prompt = ai.definePrompt({
-  name: 'parseResumePrompt',
-  input: {schema: ParseResumeInputSchema},
-  output: {schema: ParseResumeOutputSchema},
-  prompt: `You are an expert resume parser, skilled at extracting information from resumes.
-
-  Analyze the provided resume data and extract the following information:
-  - Name
-  - Email
-  - Phone
-  - Summary
-  - Experience (job title, company, dates, description)
-  - Education (institution, degree, dates, description)
-  - Skills (categorize them logically, e.g., "Programming Languages", "Frameworks", "Tools", "Design")
-  - Links (e.g., personal website, LinkedIn, GitHub portfolio). Only include links that have a valid URL.
-
-  Resume Data: {{media url=resumeDataUri}}
-
-  Ensure that the extracted data is accurate and well-formatted.
-  Return the data in JSON format.
-  `,
-});
-
-const parseResumeFlow = ai.defineFlow(
-  {
-    name: 'parseResumeFlow',
-    inputSchema: ParseResumeInputSchema,
-    outputSchema: ParseResumeOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
-  }
-);

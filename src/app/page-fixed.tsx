@@ -7,7 +7,6 @@ import type { ResumeData } from '@/lib/types';
 import { parseResume } from '@/ai/flows/parse-resume-data';
 import { useToast } from '@/hooks/use-toast';
 import { initialData } from '@/lib/initial-data';
-import { useTemplateContext } from '@/context/TemplateContext';
 import { ResumeEditor } from '@/components/resume-editor';
 import { LandingPage } from '@/components/landing-page';
 import { VerificationStep } from '@/components/verification-step';
@@ -45,7 +44,7 @@ export default function Home() {
   });
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [html2pdf, setHtml2pdf] = useState<unknown>(null);
+  const [html2pdf, setHtml2pdf] = useState<any>(null);
 
   /**
    * Handles file input change event for resume upload.
@@ -174,9 +173,9 @@ export default function Home() {
         }
         
         // Check if there's a named export
-        if (typeof (html2pdfModule as { html2pdf?: unknown }).html2pdf === 'function') {
+        if (typeof (html2pdfModule as any).html2pdf === 'function') {
           console.log('Using named export html2pdf');
-          setHtml2pdf((html2pdfModule as { html2pdf?: unknown }).html2pdf);
+          setHtml2pdf((html2pdfModule as any).html2pdf);
           return;
         }
         
@@ -260,7 +259,7 @@ export default function Home() {
     generatePDF(html2pdf);
   };
 
-  const generatePDF = (html2pdfInstance: unknown) => {
+  const generatePDF = (html2pdfInstance: any) => {
     console.log('generatePDF called with:', html2pdfInstance);
     console.log('Type of html2pdfInstance:', typeof html2pdfInstance);
     
@@ -301,39 +300,33 @@ export default function Home() {
 
   // Docx export using docx
   const handleDownloadDocx = async () => {
-    try {
-      const { Document, Packer, Paragraph, TextRun } = await import('docx');
-      // Simple docx export (expand for full resume)
-      const doc = new Document({
-        sections: [{
-          properties: {},
-          children: [
-            new Paragraph({
-              children: [
-                new TextRun({ text: resumeData?.name || '', bold: true, size: 32 }),
-              ],
-            }),
-            new Paragraph({
-              children: [
-                new TextRun(resumeData?.summary || ''),
-              ],
-            }),
-            // ...add more fields as needed
-          ],
-        }],
-      });
-      const blob = await Packer.toBlob(doc);
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'resume.docx';
-      a.click();
-      URL.revokeObjectURL(url);
-      toast({ title: 'Docx ready', description: 'Your DOCX download should begin shortly.' });
-    } catch (err: unknown) {
-      console.error('Docx export failed', err);
-      toast({ variant: 'destructive', title: 'Export failed', description: 'Could not generate DOCX. Try PDF export.' });
-    }
+    const { Document, Packer, Paragraph, TextRun } = await import('docx');
+    // Simple docx export (expand for full resume)
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({ text: resumeData?.name || '', bold: true, size: 32 }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun(resumeData?.summary || ''),
+            ],
+          }),
+          // ...add more fields as needed
+        ],
+      }],
+    });
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'resume.docx';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   // Render based on current state
@@ -342,9 +335,9 @@ export default function Home() {
       if (resumeData) {
         return (
           <>
-            <ResumeEditor
-              initialResumeData={resumeData}
-              onReset={resetApp}
+            <ResumeEditor 
+              initialResumeData={resumeData} 
+              onReset={resetApp} 
               onDownload={handleDownloadPDF}
               template={template}
               setTemplate={setTemplate}
@@ -369,9 +362,9 @@ export default function Home() {
       if (parsedData) {
         return (
           <div className="glass-container animate-slide-in-bottom">
-            <VerificationStep
-              parsedData={parsedData}
-              onComplete={handleVerificationComplete}
+            <VerificationStep 
+              parsedData={parsedData} 
+              onComplete={handleVerificationComplete} 
               onCancel={resetApp}
               fileName={fileName}
             />
