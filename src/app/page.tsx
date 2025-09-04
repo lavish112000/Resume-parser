@@ -274,23 +274,134 @@ export default function Home() {
       return;
     }
 
-    const element = document.createElement('div');
-    document.body.appendChild(element);
-    element.style.display = 'none';
-    element.innerHTML = document.getElementById('printable-resume')?.innerHTML || '';
+    // Create a temporary container for the resume content
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.left = '-9999px';
+    tempContainer.style.top = '-9999px';
+    tempContainer.style.width = '210mm'; // A4 width
+    tempContainer.style.minHeight = '297mm'; // A4 height
+    tempContainer.style.backgroundColor = 'white';
+    tempContainer.style.padding = '20mm';
+    tempContainer.style.boxSizing = 'border-box';
+    document.body.appendChild(tempContainer);
+
+    // Render the resume preview into the temporary container
+    const resumeElement = document.createElement('div');
+    const safeResumeData = resumeData || {};
+    resumeElement.innerHTML = `
+      <div style="font-family: ${styleOptions.fontFamily}; font-size: ${styleOptions.fontSize}; color: ${styleOptions.color}; line-height: ${styleOptions.lineHeight};">
+        <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #2563eb;">${safeResumeData.name || 'Your Name'}</h1>
+        <div style="margin-bottom: 15px;">
+          <p style="margin: 0; color: #6b7280;">${safeResumeData.email || 'your.email@example.com'} | ${safeResumeData.phone || 'Your Phone'}</p>
+        </div>
+        
+        ${safeResumeData.summary ? `
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 4px;">Professional Summary</h2>
+            <p style="margin: 0; line-height: 1.6;">${safeResumeData.summary}</p>
+          </div>
+        ` : ''}
+        
+        ${safeResumeData.experience && safeResumeData.experience.length > 0 ? `
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 4px;">Experience</h2>
+            ${safeResumeData.experience.map(exp => `
+              <div style="margin-bottom: 15px;">
+                <h3 style="font-size: 16px; font-weight: bold; margin: 0; color: #1f2937;">${exp.title || 'Job Title'}</h3>
+                <p style="margin: 2px 0; color: #6b7280; font-weight: 500;">${exp.company || 'Company Name'}</p>
+                <p style="margin: 2px 0; color: #9ca3af; font-size: 14px;">${exp.dates || 'Dates'}</p>
+                ${exp.description ? `<p style="margin: 8px 0; line-height: 1.6;">${exp.description}</p>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        
+        ${safeResumeData.education && safeResumeData.education.length > 0 ? `
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 4px;">Education</h2>
+            ${safeResumeData.education.map(edu => `
+              <div style="margin-bottom: 15px;">
+                <h3 style="font-size: 16px; font-weight: bold; margin: 0; color: #1f2937;">${edu.degree || 'Degree'}</h3>
+                <p style="margin: 2px 0; color: #6b7280; font-weight: 500;">${edu.institution || 'Institution'}</p>
+                <p style="margin: 2px 0; color: #9ca3af; font-size: 14px;">${edu.dates || 'Dates'}</p>
+                ${edu.description ? `<p style="margin: 8px 0; line-height: 1.6;">${edu.description}</p>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        
+        ${safeResumeData.skills && safeResumeData.skills.length > 0 ? `
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 4px;">Skills</h2>
+            ${safeResumeData.skills.map(skillCat => `
+              <div style="margin-bottom: 12px;">
+                <h3 style="font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #374151;">${skillCat.category || 'Skills'}</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  ${skillCat.skills && skillCat.skills.length > 0 ? skillCat.skills.map(skill => `<span style="background-color: #f3f4f6; color: #374151; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${skill.name || 'Skill'}</span>`).join('') : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        
+        ${safeResumeData.customSections && safeResumeData.customSections.length > 0 ? `
+          ${safeResumeData.customSections.map(section => `
+            <div style="margin-bottom: 20px;">
+              <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 4px;">${section.title || 'Section'}</h2>
+              <p style="margin: 0; line-height: 1.6;">${section.description || 'Description'}</p>
+            </div>
+          `).join('')}
+        ` : ''}
+        
+        ${safeResumeData.links && safeResumeData.links.length > 0 ? `
+          <div style="margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 4px;">Links</h2>
+            ${safeResumeData.links.map(link => `
+              <div style="margin-bottom: 8px;">
+                <a href="${link.url || '#'}" style="color: #2563eb; text-decoration: none;" target="_blank">${link.label || 'Link'}</a>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+    
+    tempContainer.appendChild(resumeElement);
 
     try {
-      html2pdfInstance().from(element).set({
+      html2pdfInstance().from(tempContainer).set({
         margin: 0.5,
-        filename: 'resume.pdf',
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        filename: `${(safeResumeData.name || 'resume').replace(/\s+/g, '_')}_resume.pdf`,
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          allowTaint: true
+        },
+        jsPDF: { 
+          unit: 'in', 
+          format: 'a4', 
+          orientation: 'portrait',
+          compress: true
+        }
       }).save().then(() => {
-        document.body.removeChild(element);
+        document.body.removeChild(tempContainer);
+        toast({
+          title: 'PDF Downloaded',
+          description: 'Your resume has been downloaded successfully!',
+        });
+      }).catch((error: any) => {
+        console.error('PDF save failed:', error);
+        document.body.removeChild(tempContainer);
+        toast({
+          variant: 'destructive',
+          title: 'PDF Download Failed',
+          description: 'There was an error saving your PDF. Please try again.',
+        });
       });
     } catch (err) {
       console.error('Failed to generate PDF', err);
-      document.body.removeChild(element);
+      document.body.removeChild(tempContainer);
       toast({
         variant: 'destructive',
         title: 'PDF generation failed',

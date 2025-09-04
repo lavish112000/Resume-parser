@@ -7,16 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { resumeExamples } from '@/lib/example-data';
 import { useAppContext } from '@/contexts/app-context';
-import { useEffect } from 'react';
 import Link from 'next/link';
 
 // Main page component for /examples route.
 export default function ExamplesPage() {
   const { setState } = useAppContext();
 
-  useEffect(() => {
-    setState('landing'); // Set to appropriate state or remove if not needed
-  }, [setState]);
+  // Note: Removed useEffect that was causing infinite loop
+  // The app context already initializes with 'landing' state
 
   // Render the examples grid UI.
   return (

@@ -6,7 +6,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAppContext } from '@/contexts/app-context';
-import { useEffect } from 'react';
 
 // Enhanced blog data with more professional content
 const blogPosts = [
@@ -70,9 +69,8 @@ const blogPosts = [
 export default function BlogPage() {
   const { setState } = useAppContext();
 
-  useEffect(() => {
-    setState('landing'); // Set to appropriate state or remove if not needed
-  }, [setState]);
+  // Note: Removed useEffect that was causing infinite loop
+  // The app context already initializes with 'landing' state
 
   return (
     <div className="glass-container p-8">
